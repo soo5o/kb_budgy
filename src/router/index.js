@@ -13,11 +13,11 @@ const router = createRouter({
       path: '/',
       component: SplashPage,
     },
-	  {
-		  path: '/mission',
-		  name: 'mission',
-		  component:MissionPage,
-	  },
+    {
+      path: '/mission',
+      name: 'mission',
+      component: MissionPage,
+    },
     {
       path: '/login',
       name: 'login',
