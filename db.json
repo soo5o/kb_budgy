@@ -67,47 +67,86 @@
       "amount": "50000",
       "consumptionDate": "2025-01-01",
       "category": "교통",
-      "memo": "교통비 충전"
+      "memo": "교통비 충전",
+      "type": "expense",
+      "id": "ad46"
     },
     {
       "userId": "1",
       "amount": "30000",
       "consumptionDate": "2025-01-08",
       "category": "식비",
-      "memo": "청년다방 떡볶이"
+      "memo": "청년다방 떡볶이",
+      "type": "expense",
+      "id": "2dce"
     },
     {
       "userId": "2",
       "amount": "55000",
       "consumptionDate": "2025-01-11",
       "category": "교통",
-      "memo": "기후동행카드 결제"
+      "memo": "기후동행카드 결제",
+      "type": "expense",
+      "id": "1d18"
     },
     {
       "userId": "3",
       "amount": "13000",
       "consumptionDate": "2025-01-01",
       "category": "식비",
-      "memo": "저녁 연어 포케"
+      "memo": "저녁 연어 포케",
+      "type": "expense",
+      "id": "39b4"
     },
     {
       "userId": "4",
       "amount": "30000",
       "consumptionDate": "2025-03-05",
       "category": "식비",
-      "memo": "고깃집 회식비"
+      "memo": "고깃집 회식비",
+      "type": "expense",
+      "id": "3320"
+    },
+    {
+      "id": "6727",
+      "userId": "",
+      "amount": 1000,
+      "category": "food",
+      "consumptionDate": "2025-04-03",
+      "memo": "",
+      "type": "expense"
+    },
+    {
+      "id": "c375",
+      "userId": "",
+      "amount": 1000,
+      "category": "food",
+      "consumptionDate": "2025-04-07",
+      "memo": "",
+      "type": "expense"
+    },
+    {
+      "id": "4810",
+      "userId": "",
+      "amount": 1000,
+      "category": "food",
+      "consumptionDate": "2025-04-07",
+      "memo": "",
+      "type": "expense"
     }
   ],
   "goal": [
     {
       "userId": "1",
       "goal_amount": "50000",
-      "successDate": "1"
+      "successDate": "1",
+      "id": "05c3"
     },
     {
       "userId": "2",
       "goal_amount": "80000",
-      "successDate": "3"
+      "successDate": "3",
+      "id": "5f25"
     }
   ]
 }
