@@ -1,13 +1,7 @@
 <template>
   <div class="splash-container">
     <transition name="fade">
-      <img
-        v-if="showLogo"
-        src="@/assets/logo.png"
-        alt="Logo"
-        class="logo"
-        width="200px"
-      />
+      <img v-if="showLogo" src="@/assets/logo.png" alt="Logo" class="logo" width="200px" />
     </transition>
   </div>
 </template>

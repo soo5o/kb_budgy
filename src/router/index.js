@@ -5,6 +5,7 @@ import SignUpPage from '@/pages/SignUpPage.vue';
 import HomePage from '@/pages/HomePage.vue';
 import AddPage from '@/pages/AddPage.vue';
 import DetailPage from '@/pages/DetailPage.vue';
+import ChartPage from '@/pages/ChartPage.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,6 +38,11 @@ const router = createRouter({
       path: '/detail',
       name: 'detail',
       component: DetailPage,
+    },
+    {
+      path: '/chart/:userId',
+      name: 'chart',
+      component: ChartPage,
     },
   ],
 });
