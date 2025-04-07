@@ -1,5 +1,21 @@
-<script setup></script>
+<script setup>
+import AddPage from './pages/AddPage.vue';
 
-<template></template>
+components: {
+  AddPage;
+}
+</script>
 
-<style scoped></style>
+<template>
+  <div class="container">
+    <AddPage></AddPage>
+  </div>
+</template>
+
+<style scoped>
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>
