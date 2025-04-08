@@ -1,11 +1,4 @@
 <template>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
   <!-- 로딩 완료 후-->
   <div class="allWrap" v-if="!isLoading">
     <h1>Mission Page</h1>
@@ -24,8 +17,8 @@
       <br />
       <div id="viewContinuous" class="card">
         <h2 class="card-title">
-          <i class="fa-solid fa-thumbs-up"></i> 이번 달, 성공한 날
-          {{ successLength }}일!
+          <i class="fa-solid fa-thumbs-up" style="color: #4fcca4"></i> 이번 달,
+          성공한 날 {{ successLength }}일!
         </h2>
       </div>
       <br />
@@ -92,7 +85,23 @@ onMounted(async () => {
     if (userGoal.value) {
       //user에게 goal 있으면
       successDate.value = userGoal.value.successDate;
-      successLength.value = successDate.value.length;
+      console.log(successDate.value);
+
+      //이번 달 성공일수 계산
+      function calSuccess() {
+        let todayMonth = new Date().getMonth(); //현재 달 구하기
+        let length = 0;
+        for (let suDate of successDate.value) {
+          let suDateMonth = new Date(suDate).getMonth();
+          console.log('today ', todayMonth, 'sudateMonth ', suDateMonth);
+          if (todayMonth == suDateMonth) {
+            console.log('length++');
+            length++;
+          }
+        }
+        successLength.value = length;
+      }
+      calSuccess();
     }
   } catch (error) {
     console.error(error);
@@ -143,6 +152,6 @@ const attrs = computed(() => [
   text-align: center;
   padding: 2rem;
   font-size: 1.5rem;
-  color: #4fcca4;
+  color: #4caf50;
 }
 </style>
