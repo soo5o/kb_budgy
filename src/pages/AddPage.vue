@@ -115,8 +115,6 @@ const goHome = () => {
 .list-container {
   width: 480px;
   height: 100vh;
-  border: 1px solid black;
-  border-radius: 1rem;
 }
 input {
   background-color: #f5f4f4;
