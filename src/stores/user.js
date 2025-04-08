@@ -15,6 +15,8 @@ export const useUserStore = defineStore('user', () => {
       console.log(response);
       if (response.data.length > 0) {
         state.userInfo = response.data; //데이터 저장
+        localStorage.setItem('userInfo', JSON.stringify(response.data)); //localStorage에 저장
+
         console.log('내 정보: ', [...state.userInfo]);
         return true;
       } else if (response.data.length == 0) {
@@ -45,6 +47,12 @@ export const useUserStore = defineStore('user', () => {
       return false;
     }
   };
+  const loadUserInfo = () => {
+    const savedInfo = localStorage.getItem('userInfo');
+    if (savedInfo) {
+      state.userInfo = JSON.parse(savedInfo);
+    }
+  };
   const userInfo = computed(() => [...state.userInfo]);
-  return { matchUserInfo, checkAccount, addUserInfo, userInfo };
+  return { matchUserInfo, checkAccount, addUserInfo, loadUserInfo, userInfo };
 });
