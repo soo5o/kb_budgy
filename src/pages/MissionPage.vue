@@ -16,10 +16,10 @@
       </div>
       <br />
       <div id="viewContinuous" class="card">
-        <h2 class="card-title">
+        <h3 class="card-title">
           <i class="fa-solid fa-thumbs-up" style="color: #4fcca4"></i> 이번 달,
           성공한 날 {{ successLength }}일!
-        </h2>
+        </h3>
       </div>
       <br />
     </div>
@@ -63,11 +63,14 @@ userStore.loadUserInfo(); // 페이지 로드 시 저장된 유저 정보 불러
 
 const info = computed(() => userStore.userInfo);
 
-//db.json에 있는 goal들 불러오기
+//db.json에 있는 goal 전부 불러오기
 const goals = ref([]);
+//userId에 해당하는 goal
 const userGoal = ref(undefined);
 const successDate = ref([]);
-const successLength = ref(0);
+const successLength = ref([]);
+const userMoneyList = ref([]); //userId 기준 쓴 돈 기록들
+
 onMounted(async () => {
   try {
     await userStore.loadUserInfo();
@@ -83,9 +86,37 @@ onMounted(async () => {
     //로그인된 user id로 user의 goal 찾기
     userGoal.value = goals.value.find((g) => g.userId == info.value[0].id);
     if (userGoal.value) {
-      //user에게 goal 있으면
-      successDate.value = userGoal.value.successDate;
-      console.log(successDate.value);
+      //미션 성공일 계산
+
+      //userId로 해당 user의 moneyList 가져옴
+      //http://localhost:3000/money?userId=1&type=expense
+      const responseMoney = await axios.get(
+        'http://localhost:3000/money?userId=' +
+          info.value[0].id +
+          '&type=expense'
+      );
+      userMoneyList.value = responseMoney.data;
+
+      //moneyList 있으면 날짜별로 money구하기
+      const dayConsume = {};
+
+      userMoneyList.value.forEach((item) => {
+        const date = item.consumptionDate;
+        const amount = parseInt(item.amount);
+        if (!dayConsume[date]) {
+          dayConsume[date] = 0;
+        }
+        dayConsume[date] += amount;
+      });
+      console.log(dayConsume);
+
+      //goal의 goal_amount보다 money가 더 적으면 successDate 배열에 넣기
+      for (const consume in dayConsume) {
+        console.log(`${consume} , ${dayConsume[consume]}`);
+        if (userGoal.value.goal_amount >= dayConsume[consume]) {
+          successDate.value.push(consume);
+        }
+      }
 
       //이번 달 성공일수 계산
       function calSuccess() {
@@ -109,8 +140,7 @@ onMounted(async () => {
     isLoading.value = false;
   }
 });
-
-const selectedDate = ref(null);
+const selectedDate = ref(new Date()); //오늘 기준으로 달력 표시
 const attrs = computed(() => [
   {
     key: 'mission-success',
