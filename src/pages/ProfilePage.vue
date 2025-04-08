@@ -1,32 +1,46 @@
 <template>
   <div class="container">
-    <img src="@/assets/logo.png" width="180px" />
+    <img src="@/assets/logo.png" width="150px" />
     <h3 class="text-center fw-bold mt-1 mb-3 ms-3">{{ name }}님</h3>
     <!-- 비밀번호 변경 -->
     <strong>비밀번호 변경</strong>
     <input
+      v-if="!validatePwd"
       type="password"
-      class="form-control"
-      placeholder="기존 비밀번호를 입력해주세요"
+      class="form-control p-2"
+      placeholder="현재 비밀번호를 입력해주세요"
+      v-model="currentPwd"
     />
-    <input
-      type="password"
-      class="form-control"
-      placeholder="새로운 비밀번호를 입력해주세요"
-    />
-    <input
-      type="password"
-      class="form-control"
-      placeholder="새로운 비밀번호를 재입력해주세요"
-    />
-    <button class="btn w-100">변경</button>
-    <button class="btn w-100" @click="logout">로그아웃</button>
+    <div class="w-100" v-else>
+      <input
+        type="password"
+        class="form-control p-2 mt-2 mb-3"
+        placeholder="새로운 비밀번호를 입력해주세요"
+        v-model="nextPwd"
+      />
+      <input
+        type="password"
+        class="form-control p-2"
+        placeholder="새로운 비밀번호를 재입력해주세요"
+        v-model="rePwd"
+      />
+    </div>
+    <div class="text-danger" v-if="alertDisplay">
+      비밀번호가 일치하지 않습니다.
+    </div>
+    <button class="btn w-100 fw-bold" @click="checkPwd">변경</button>
+    <button class="btn w-100 fw-bold" @click="logout">로그아웃</button>
   </div>
 </template>
 <script setup>
 import { useUserStore } from '@/stores/user.js';
 import { useRouter, useRoute } from 'vue-router';
 import { ref } from 'vue';
+const currentPwd = ref('');
+const nextPwd = ref('');
+const rePwd = ref('');
+const alertDisplay = ref(false);
+const validatePwd = ref(false);
 const router = useRouter();
 const userStore = useUserStore();
 const name = ref('');
@@ -36,6 +50,16 @@ function logout() {
   userStore.clearUser(); // Pinia나 Vuex 쓴다면 user 상태도 초기화
   router.push('/login'); // 로그인 페이지로 이동
 }
+const checkPwd = () => {
+  const myPwd = userStore.userInfo[0].password;
+  console.log(myPwd);
+  if (myPwd === currentPwd.value) {
+    validatePwd.value = true;
+    alertDisplay.value = false;
+  } else {
+    alertDisplay.value = true;
+  }
+};
 </script>
 <style scoped>
 .container {
