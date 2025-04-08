@@ -73,6 +73,15 @@
     },
     {
       "userId": "1",
+      "amount": "50010",
+      "consumptionDate": "2025-01-01",
+      "category": "교통",
+      "memo": "교통비 충전",
+      "type": "income",
+      "id": "ad44"
+    },
+    {
+      "userId": "1",
       "amount": "30000",
       "consumptionDate": "2025-01-08",
       "category": "식비",
