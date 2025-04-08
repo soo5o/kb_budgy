@@ -1,9 +1,12 @@
 <script setup>
-import AddPage from './pages/AddPage.vue';
+import { onMounted } from 'vue';
+import { useUserStore } from './stores/user';
 
-components: {
-  AddPage;
-}
+const userStore = useUserStore();
+
+onMounted(() => {
+  userStore.loadUserInfo();
+});
 </script>
 
 <template>
