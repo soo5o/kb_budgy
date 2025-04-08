@@ -1,24 +1,19 @@
 <script setup>
-import { onMounted } from 'vue';
-import { useUserStore } from './stores/user';
-
-const userStore = useUserStore();
-
-onMounted(() => {
-  userStore.loadUserInfo();
-});
+import BottomNav from './components/BottomNav.vue';
 </script>
 
 <template>
   <div class="container">
     <router-view></router-view>
+    <BottomNav></BottomNav>
   </div>
 </template>
 
 <style scoped>
 .container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  min-height: 100vh;
+  position: relative;
+  padding-bottom: 64px; /* BottomNav 높이만큼 여백 확보 */
+  box-sizing: border-box;
 }
 </style>
