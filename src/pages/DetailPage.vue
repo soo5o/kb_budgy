@@ -1,18 +1,22 @@
 <template>
-  <div class="detail-container">
-    <MoneySummary></MoneySummary>
-    <nav class="navbar navbar-light mt-3">
-      <form class="container-fluid justify-content-start">
-        <button class="btn btn-outline-success me-2" type="button">일일</button>
-        <button class="btn btn-outline-secondary me-2" type="button">
-          주간
-        </button>
-      </form>
-    </nav>
-    <AddButton></AddButton>
-    <hr />
-    <div v-for="(items, date) in groupedData" :key="date">
-      <h6>{{ formatDate(date) }}</h6>
+  <div class="d-flex justify-content-center">
+    <div class="detail-container">
+      <MoneySummary></MoneySummary>
+      <nav class="navbar navbar-light mt-3">
+        <form class="container-fluid justify-content-start">
+          <button class="btn btn-outline-success me-2" type="button">
+            일일
+          </button>
+          <button class="btn btn-outline-secondary me-2" type="button">
+            주간
+          </button>
+        </form>
+      </nav>
+      <AddButton></AddButton>
+      <hr />
+      <div v-for="(items, date) in groupedData" :key="date">
+        <h6>{{ formatDate(date) }}</h6>
+      </div>
     </div>
   </div>
 </template>
@@ -46,12 +50,15 @@ onMounted(async () => {
   );
 
   moneyList.value = data.sort(
-    (a, b) => new Date(b.consumptionDate) - a.consumptionDate
+    (a, b) => new Date(b.consumptionDate) - new Date(a.consumptionDate)
   );
+  console.log(moneyList.value);
+  console.log(groupedData.value);
 });
 
 //날짜 포맷 함수
 const formatDate = (dateStr) => {
+  console.log('안돼요', dateStr);
   const date = new Date(dateStr);
   return `${date.getMonth() + 1}월 ${date.getDate()}일 (${
     ['일', '월', '화', '수', '목', '금', '토'][date.getDay()]
@@ -62,7 +69,7 @@ const formatDate = (dateStr) => {
 const groupedData = computed(() => {
   const group = {};
   moneyList.value.forEach((item) => {
-    const date = item.comsumptionDate;
+    const date = item.consumptionDate;
     if (!group[date]) {
       group[date] = [];
     }

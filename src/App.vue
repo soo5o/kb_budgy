@@ -1,5 +1,13 @@
 <script setup>
 import BottomNav from './components/BottomNav.vue';
+import { useUserStore } from '@/stores/user';
+import { onMounted } from 'vue';
+
+const userStore = useUserStore();
+
+onMounted(() => {
+  userStore.loadUserInfo();
+});
 </script>
 
 <template>
