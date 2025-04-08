@@ -6,6 +6,7 @@ import axios from 'axios';
 export const useUserStore = defineStore('user', () => {
   const state = reactive({ userInfo: [] });
   const MEMBERSURL = 'http://localhost:3000/members';
+  const MONEYURL = 'http://localhost:3000/money';
   const matchUserInfo = async (email, pwd) => {
     try {
       console.log(email, pwd);
@@ -53,6 +54,24 @@ export const useUserStore = defineStore('user', () => {
       state.userInfo = JSON.parse(savedInfo);
     }
   };
+  const getMoneyList = async (userId, targetYear, targetMonth) => {
+    console.log('계정의 userId: ', userId);
+    const response = await axios.get(MONEYURL + `?userId=${userId}`);
+    const allData = response.data;
+    const filtered = allData.filter((item) => {
+      const [year, month] = item.consumptionDate.split('-');
+      return Number(year) === targetYear && Number(month) === targetMonth;
+    });
+    console.log('filtered 결과: ', filtered);
+    return filtered;
+  };
   const userInfo = computed(() => [...state.userInfo]);
-  return { matchUserInfo, checkAccount, addUserInfo, loadUserInfo, userInfo };
+  return {
+    matchUserInfo,
+    checkAccount,
+    addUserInfo,
+    loadUserInfo,
+    getMoneyList,
+    userInfo,
+  };
 });

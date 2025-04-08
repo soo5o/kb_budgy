@@ -1,19 +1,15 @@
 <script setup>
 import BottomNav from './components/BottomNav.vue';
-import { useUserStore } from '@/stores/user';
-import { onMounted } from 'vue';
+import { useUserStore } from '@/stores/user.js';
 
 const userStore = useUserStore();
-
-onMounted(() => {
-  userStore.loadUserInfo();
-});
+userStore.loadUserInfo();
 </script>
 
 <template>
   <div class="container">
     <router-view></router-view>
-    <BottomNav></BottomNav>
+    <BottomNav v-if="userStore.userInfo.length > 0" />
   </div>
 </template>
 
