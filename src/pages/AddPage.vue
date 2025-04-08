@@ -79,8 +79,8 @@ const type = ref('');
 //항목 추가 함수
 const addMoneyItem = async () => {
   const userStore = useUserStore();
-  userId.value = userStore.user?.id || '';
-  console.log(userId.value);
+  const currentUserId = userStore.userInfo[0]?.id;
+  console.log(userStore.userInfo);
   if (
     !amount.value ||
     category.value === '카테고리를 선택하세요' ||
@@ -98,7 +98,7 @@ const addMoneyItem = async () => {
 
   try {
     const newItem = {
-      userId,
+      userId: currentUserId,
       amount: amount.value,
       category: category.value,
       consumptionDate: consumptionDate.value,

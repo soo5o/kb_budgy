@@ -1,7 +1,10 @@
 <template>
   <div class="d-flex justify-content-center">
     <div class="detail-container">
-      <MoneySummary></MoneySummary>
+      <MoneySummary
+        :totalIncome="totalIncome"
+        :totalExpense="totalExpense"
+      ></MoneySummary>
       <nav class="navbar navbar-light mt-3">
         <form class="container-fluid justify-content-start">
           <button class="btn btn-outline-success me-2" type="button">
@@ -82,6 +85,20 @@ const fetchData = async () => {
     (a, b) => new Date(b.consumptionDate) - new Date(a.consumptionDate)
   );
 };
+
+//총 수입 계산하는 함수
+const totalIncome = computed(() => {
+  return moneyList.value
+    .filter((item) => item.type === 'income')
+    .reduce((acc, cur) => acc + Number(cur.amount), 0);
+});
+
+//총 지출 계산하는 함수
+const totalExpense = computed(() => {
+  return moneyList.value
+    .filter((item) => item.type === 'expense')
+    .reduce((acc, cur) => acc + Number(cur.amount), 0);
+});
 
 //날짜 포맷 함수
 const formatDate = (dateStr) => {
