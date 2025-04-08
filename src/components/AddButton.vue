@@ -22,7 +22,7 @@ const goToAddPage = () => {
   font-weight: bold;
   font-size: 20px;
   position: absolute;
-  top: 35%;
-  right: 7%;
+  top: 5%;
+  right: 5%;
 }
 </style>

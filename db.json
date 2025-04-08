@@ -153,30 +153,57 @@
       "id": "3320"
     },
     {
-      "id": "6727",
-      "userId": "",
-      "amount": 1000,
-      "category": "food",
-      "consumptionDate": "2025-04-03",
-      "memo": "",
+      "id": "a531",
+      "userId": {
+        "dep": {
+          "version": 0,
+          "sc": 0
+        },
+        "__v_isRef": true,
+        "__v_isShallow": false,
+        "_rawValue": "",
+        "_value": ""
+      },
+      "amount": 100000,
+      "category": "취미",
+      "consumptionDate": "2025-04-08",
+      "memo": "레알 마드리드 유니폼 사기ㅎㅎ",
       "type": "expense"
     },
     {
-      "id": "c375",
-      "userId": "",
+      "id": "3467",
+      "userId": {
+        "dep": {
+          "version": 0,
+          "sc": 0
+        },
+        "__v_isRef": true,
+        "__v_isShallow": false,
+        "_rawValue": "",
+        "_value": ""
+      },
       "amount": 1000,
-      "category": "food",
-      "consumptionDate": "2025-04-07",
-      "memo": "",
-      "type": "expense"
+      "category": "주거",
+      "consumptionDate": "2025-04-09",
+      "memo": "월세를 내라",
+      "type": "income"
     },
     {
-      "id": "4810",
-      "userId": "",
-      "amount": 1000,
-      "category": "food",
-      "consumptionDate": "2025-04-07",
-      "memo": "",
+      "id": "fc84",
+      "userId": {
+        "dep": {
+          "version": 0,
+          "sc": 0
+        },
+        "__v_isRef": true,
+        "__v_isShallow": false,
+        "_rawValue": "",
+        "_value": ""
+      },
+      "amount": 500000,
+      "category": "건강",
+      "consumptionDate": "2025-04-10",
+      "memo": "뼈가 아파요",
       "type": "expense"
     }
   ],

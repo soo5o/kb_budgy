@@ -31,15 +31,15 @@
           <option selected value="카테고리를 선택하세요">
             카테고리를 선택하세요
           </option>
-          <option value="food">🍚 생활/식비</option>
-          <option value="home">🏠 주거/통신</option>
-          <option value="transportation">🚌 교통/이동</option>
-          <option value="hobby">🎉 여가/취미</option>
-          <option value="health">🩺 건강/의료</option>
-          <option value="family">👪 가족/인간관계</option>
-          <option value="edu">👜 교육/자기계발</option>
-          <option value="money">💳 금융/저축</option>
-          <option value="guitar">🧷 기타</option>
+          <option value="식비">🍚 생활/식비</option>
+          <option value="주거">🏠 주거/통신</option>
+          <option value="교통">🚌 교통/이동</option>
+          <option value="취미">🎉 여가/취미</option>
+          <option value="건강">🩺 건강/의료</option>
+          <option value="가족">👪 가족/인간관계</option>
+          <option value="교육">👜 교육/자기계발</option>
+          <option value="금융">💳 금융/저축</option>
+          <option value="기타">🧷 기타</option>
         </select>
       </label>
       <label class="w-100 mt-4">
@@ -78,6 +78,9 @@ const type = ref('');
 
 //항목 추가 함수
 const addMoneyItem = async () => {
+  const userStore = useUserStore();
+  userId.value = userStore.user?.id || '';
+  console.log(userId.value);
   if (
     !amount.value ||
     category.value === '카테고리를 선택하세요' ||
@@ -95,7 +98,7 @@ const addMoneyItem = async () => {
 
   try {
     const newItem = {
-      userId: userId.value,
+      userId,
       amount: amount.value,
       category: category.value,
       consumptionDate: consumptionDate.value,

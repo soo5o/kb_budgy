@@ -11,12 +11,20 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { computed } from 'vue';
+//총 수입 계산하는 함수
+const totalIncome = computed(() => {
+  moneyList.value
+    .filter((item) => item.type === 'income')
+    .reduce((acc, cur) => acc + Number(cur.amount), 0);
+});
+</script>
 
 <style scoped>
 .card {
   background-color: #e4f4ef;
-  margin-top: 5rem;
+  margin-top: 2rem;
   padding: 2rem;
 }
 .card-text {
