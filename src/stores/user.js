@@ -55,15 +55,16 @@ export const useUserStore = defineStore('user', () => {
     }
   };
   const getMoneyList = async (userId, targetYear, targetMonth) => {
-    console.log('계정의 userId: ', userId);
     const response = await axios.get(MONEYURL + `?userId=${userId}`);
     const allData = response.data;
     const filtered = allData.filter((item) => {
       const [year, month] = item.consumptionDate.split('-');
       return Number(year) === targetYear && Number(month) === targetMonth;
     });
-    console.log('filtered 결과: ', filtered);
     return filtered;
+  };
+  const clearUser = () => {
+    userInfo.value = [];
   };
   const userInfo = computed(() => [...state.userInfo]);
   return {
@@ -73,5 +74,6 @@ export const useUserStore = defineStore('user', () => {
     loadUserInfo,
     getMoneyList,
     userInfo,
+    clearUser,
   };
 });

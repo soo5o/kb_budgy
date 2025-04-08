@@ -1,6 +1,29 @@
 <template>
   <div class="container mt-3">
     <FullCalendar :options="calendarOptions" />
+    <div class="list-group mb-3" ref="listRef">
+      <div
+        class="list-group-item p-2"
+        v-for="(item, index) in moneyList.filter(
+          (m) => m.consumptionDate === selectedDate
+        )"
+        :key="index"
+      >
+        <div class="list-detail ms-3">
+          <div class="fw-bold">{{ item.memo }}</div>
+          <div class="text-secondary detail-category">{{ item.category }}</div>
+        </div>
+        <div
+          class="detail-amount me-2"
+          :style="
+            item.type === 'income' ? { color: '#4fcca4' } : { color: 'black' }
+          "
+        >
+          {{ item.type === 'income' ? '+' : '-'
+          }}{{ parseInt(item.amount).toLocaleString() }}원
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script setup>
@@ -10,21 +33,21 @@ import interactionPlugin from '@fullcalendar/interaction'; // for selectable
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-import { ref, reactive } from 'vue';
+import { ref, reactive, nextTick } from 'vue';
 import { useUserStore } from '@/stores/user.js';
 const moneyList = ref([]);
 const totalExpense = ref(0);
 const totalIncome = ref(0);
-const selectedDate = ref(null);
+const selectedDate = ref(new Date().toISOString().slice(0, 10));
 const calendarEvents = ref([]);
 const userStore = useUserStore();
+const listRef = ref(null);
 const calendarOptions = reactive({
   locale: koLocale,
   plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
   initialView: 'dayGridMonth',
   selectable: true,
   async datesSet(info) {
-    //userStore.loadUserInfo(); // 페이지 로드 시 저장된 유저 정보 불러오기 App.vue에 추가해서 괜찮을 듯?
     const userId = userStore.userInfo[0].id;
     console.log('userId', userId);
     const currentDate = new Date(info.view.currentStart); // 현재 보이는 시작 날짜
@@ -53,6 +76,7 @@ const calendarOptions = reactive({
         .replace(')', `, ${opacity})`);
     }
   },
+
   dayCellContent: function (arg) {
     return { html: String(arg.date.getDate()) };
   },
@@ -63,6 +87,11 @@ const calendarOptions = reactive({
   },
   dateClick(info) {
     selectedDate.value = info.dateStr; // 클릭한 날짜 저장
+    scrollToList();
+  },
+  eventClick(info) {
+    selectedDate.value = info.event.startStr;
+    scrollToList();
   },
 });
 function generateDailySummaryEvents(moneyList) {
@@ -84,10 +113,9 @@ function generateDailySummaryEvents(moneyList) {
   const events = [];
 
   for (const [date, { income, expense }] of Object.entries(dailyMap)) {
-    console.log('date: ', date, ', income: ', income);
     if (income > 0) {
       events.push({
-        title: `+${income.toLocaleString()}`,
+        title: `+ ${income.toLocaleString()}`,
         start: date,
         color: '#46b894',
         extendedProps: {
@@ -98,7 +126,7 @@ function generateDailySummaryEvents(moneyList) {
     }
     if (expense > 0) {
       events.push({
-        title: `-${expense.toLocaleString()}`,
+        title: `- ${expense.toLocaleString()}`,
         start: date,
         color: '#a069ba',
         extendedProps: {
@@ -111,8 +139,52 @@ function generateDailySummaryEvents(moneyList) {
 
   return events;
 }
+function smoothScrollTo(targetY, duration = 800) {
+  const startY = window.scrollY;
+  const distance = targetY - startY;
+  const startTime = performance.now();
+
+  function step(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = easeInOutQuad(progress); // 부드러운 가속 감속
+
+    window.scrollTo(0, startY + distance * ease);
+
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    }
+  }
+
+  function easeInOutQuad(t) {
+    return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+  }
+
+  requestAnimationFrame(step);
+}
+function scrollToList() {
+  nextTick(() => {
+    if (listRef.value) {
+      const offsetTop =
+        listRef.value.getBoundingClientRect().top + window.scrollY;
+      smoothScrollTo(offsetTop, 600); // 0.6초 동안 천천히 이동
+    }
+  });
+}
 </script>
 <style scoped>
+.detail-amount {
+  display: flex;
+  font-weight: 550;
+  align-items: center;
+}
+.detail-category {
+  font-size: 13px;
+}
+.list-group-item {
+  display: flex;
+  justify-content: space-between;
+}
 .amount {
   font-weight: bold;
   margin-top: 10px;
@@ -130,8 +202,9 @@ function generateDailySummaryEvents(moneyList) {
   min-height: 60px; /* 높이도 어느 정도 고정되도록 */
 }
 ::v-deep .fc {
-  height: 100%;
+  /* height: 100%; */
   width: 100%;
+  min-height: 500px;
 }
 ::v-deep .fc-button {
   background-color: inherit;
@@ -144,11 +217,12 @@ function generateDailySummaryEvents(moneyList) {
 .container {
   margin: 0;
   padding: 0;
-  height: 100vh; /* 뷰포트 높이 전체 사용 */
+  height: auto;
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* 스크롤 없애기 */
-} /* 파란색 텍스트 없애기 */
+  overflow: auto;
+}
+/* 파란색 텍스트 없애기 */
 ::v-deep .fc-daygrid-day-number {
   color: #333; /* 기본 날짜 텍스트 색상 */
   text-decoration: none;
@@ -179,6 +253,10 @@ function generateDailySummaryEvents(moneyList) {
 ::v-deep .fc-col-header-cell {
   color: #333; /* 검정 계열로 */
   background-color: transparent;
+}
+::v-deep .fc-button:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }
 .month-expense {
   color: #a069ba;
