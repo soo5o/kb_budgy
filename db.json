@@ -73,6 +73,42 @@
     },
     {
       "userId": "1",
+      "amount": "50000",
+      "consumptionDate": "2025-04-01",
+      "category": "교통",
+      "memo": "교통비 충전",
+      "type": "expense",
+      "id": "ad48"
+    },
+    {
+      "userId": "1",
+      "amount": "5",
+      "consumptionDate": "2025-04-01",
+      "category": "교통",
+      "memo": "교통비 충전",
+      "type": "expense",
+      "id": "ad50"
+    },
+    {
+      "userId": "1",
+      "amount": "3000",
+      "consumptionDate": "2025-04-08",
+      "category": "교통",
+      "memo": "교통비 충전",
+      "type": "expense",
+      "id": "ad47"
+    },
+    {
+      "userId": "1",
+      "amount": "300",
+      "consumptionDate": "2025-04-08",
+      "category": "교통",
+      "memo": "교통비 환불",
+      "type": "income",
+      "id": "ad49"
+    },
+    {
+      "userId": "1",
       "amount": "50010",
       "consumptionDate": "2025-01-01",
       "category": "교통",

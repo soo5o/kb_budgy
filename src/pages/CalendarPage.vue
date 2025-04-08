@@ -1,8 +1,6 @@
 <template>
   <div class="container mt-3">
     <FullCalendar :options="calendarOptions" />
-    {{ totalExpense }}
-    {{ totalIncome }}
   </div>
 </template>
 <script setup>
@@ -18,6 +16,7 @@ const moneyList = ref([]);
 const totalExpense = ref(0);
 const totalIncome = ref(0);
 const selectedDate = ref(null);
+const calendarEvents = ref([]);
 const userStore = useUserStore();
 const calendarOptions = reactive({
   locale: koLocale,
@@ -25,7 +24,7 @@ const calendarOptions = reactive({
   initialView: 'dayGridMonth',
   selectable: true,
   async datesSet(info) {
-    userStore.loadUserInfo(); // 페이지 로드 시 저장된 유저 정보 불러오기
+    //userStore.loadUserInfo(); // 페이지 로드 시 저장된 유저 정보 불러오기 App.vue에 추가해서 괜찮을 듯?
     const userId = userStore.userInfo[0].id;
     console.log('userId', userId);
     const currentDate = new Date(info.view.currentStart); // 현재 보이는 시작 날짜
@@ -39,38 +38,10 @@ const calendarOptions = reactive({
     totalIncome.value = moneyList.value.reduce((acc, cur) => {
       return cur.type === 'income' ? acc + parseInt(cur.amount) : acc;
     }, 0);
-    calendarOptions.events = generateDailySummaryEvents(moneyList.value); //일별 이벤트 생성
+    calendarEvents.value = generateDailySummaryEvents(moneyList.value); //일별 이벤트 생성
   },
 
-  events: [
-    // {
-    //   title: '-6,000',
-    //   start: '2025-04-07',
-    //   color: '#a069ba',
-    //   extendedProps: {
-    //     borderColor: '#a069ba',
-    //     opacity: 0.8,
-    //   },
-    // },
-    // {
-    //   title: '+5,000',
-    //   start: '2025-04-07',
-    //   color: '#46b894',
-    //   extendedProps: {
-    //     borderColor: '#46b894',
-    //     opacity: 0.8,
-    //   },
-    // },
-    // {
-    //   title: '+12,000,000',
-    //   start: '2025-04-08',
-    //   color: '#46b894',
-    //   extendedProps: {
-    //     borderColor: '#46b894',
-    //     opacity: 0.8,
-    //   },
-    // },
-  ],
+  events: calendarEvents,
   eventDidMount(info) {
     const { borderColor, opacity } = info.event.extendedProps;
     if (borderColor) {
@@ -98,7 +69,7 @@ function generateDailySummaryEvents(moneyList) {
   const dailyMap = {};
 
   for (const item of moneyList) {
-    const date = item.date; // 'YYYY-MM-DD'
+    const date = item.consumptionDate; // 'YYYY-MM-DD'
     const amount = parseInt(item.amount);
     if (!dailyMap[date]) {
       dailyMap[date] = { income: 0, expense: 0 };
@@ -113,6 +84,7 @@ function generateDailySummaryEvents(moneyList) {
   const events = [];
 
   for (const [date, { income, expense }] of Object.entries(dailyMap)) {
+    console.log('date: ', date, ', income: ', income);
     if (income > 0) {
       events.push({
         title: `+${income.toLocaleString()}`,
