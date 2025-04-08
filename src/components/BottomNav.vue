@@ -1,12 +1,12 @@
 <template>
-  <nav class="bottom-nav">
+  <nav class="bottom-nav" v-if="!isHiddenPage">
     <div class="d-flex w-100 h-100">
       <a
         v-for="tab in tabs"
         :key="tab.name"
-        @click.prevent="goTo(tab.path)"
         class="btn-tabbar"
-        :class="{ selected: isActive(tab.path) }"
+        :class="{ selected: currentPath === tab.path }"
+        @click.prevent="router.push(tab.path)"
         href="#"
       >
         <span class="ico">
@@ -20,28 +20,24 @@
 
 <script setup>
 import { useRouter, useRoute } from 'vue-router';
-import { ref, computed } from 'vue';
-import { useUserStore } from '@/stores/user';
+import { computed } from 'vue';
 
 const router = useRouter();
 const route = useRoute();
 
-const userStore = useUserStore();
-const userId = computed(() => userStore.userInfo[0]?.id || 0);
+const currentPath = computed(() => route.path);
 
-const tabs = computed(() => [
+const tabs = [
   { name: '홈', path: '/home', icon: 'fa-solid fa-house' },
-  { name: '소비분석', path: `/chart/${userId.value}`, icon: 'fa-solid fa-chart-column' },
+  { name: '소비분석', path: '/chart', icon: 'fa-solid fa-chart-column' },
   { name: '달력', path: '/calendar', icon: 'fa-solid fa-calendar-days' },
   { name: '미션', path: '/mission', icon: 'fa-solid fa-bullseye' },
   { name: '회원정보', path: '/profile', icon: 'fa-solid fa-user' },
-]);
+];
 
-const goTo = (path) => {
-  router.push(path);
-};
-
-const isActive = (path) => route.path === path;
+// 스플래시, 로그인, 회원가입 페이지에서는 숨김
+const hiddenPaths = ['/', '/login', '/signup'];
+const isHiddenPage = computed(() => hiddenPaths.includes(route.path));
 </script>
 
 <style scoped>
