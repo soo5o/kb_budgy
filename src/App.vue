@@ -1,13 +1,9 @@
 <script setup>
 import BottomNav from './components/BottomNav.vue';
-import AddPage from './pages/AddPage.vue';
 import { useUserStore } from '@/stores/user.js';
 
 const userStore = useUserStore();
 userStore.loadUserInfo();
-components: {
-  AddPage;
-}
 </script>
 
 <template>

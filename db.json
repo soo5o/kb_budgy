@@ -162,30 +162,12 @@
       "id": "3320"
     },
     {
-      "id": "6727",
-      "userId": "",
-      "amount": 1000,
-      "category": "food",
-      "consumptionDate": "2025-04-03",
-      "memo": "",
-      "type": "expense"
-    },
-    {
-      "id": "c375",
-      "userId": "",
-      "amount": 1000,
-      "category": "food",
-      "consumptionDate": "2025-04-07",
-      "memo": "",
-      "type": "expense"
-    },
-    {
-      "id": "4810",
-      "userId": "",
-      "amount": 1000,
-      "category": "food",
-      "consumptionDate": "2025-04-07",
-      "memo": "",
+      "id": "7494",
+      "userId": "1",
+      "amount": 100000,
+      "category": "취미",
+      "consumptionDate": "2025-04-08",
+      "memo": "레알 마드리드 유니폼 샀다~~",
       "type": "expense"
     }
   ],
