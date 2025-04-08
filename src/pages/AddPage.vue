@@ -1,56 +1,62 @@
 <template>
-  <div class="list-container p-5">
-    <label class="w-100 mt-4">
-      금액
-      <input type="number" class="form-control mt-2" v-model="amount" />
-    </label>
-    <div class="form-check-inline mt-4">
-      <input
-        class="form-check-input"
-        type="radio"
-        name="moneyType"
-        v-model="type"
-        value="income"
-      />
-      <label class="form-check-label">&nbsp;수입</label>
+  <div class="d-flex justify-content-center">
+    <div class="list-container p-5">
+      <label class="w-100 mt-4">
+        금액
+        <input type="number" class="form-control mt-2" v-model="amount" />
+      </label>
+      <div class="form-check-inline mt-4">
+        <input
+          class="form-check-input"
+          type="radio"
+          name="moneyType"
+          v-model="type"
+          value="income"
+        />
+        <label class="form-check-label">&nbsp;수입</label>
+      </div>
+      <div class="form-check-inline">
+        <input
+          class="form-check-input"
+          type="radio"
+          name="moneyType"
+          v-model="type"
+          value="expense"
+        />
+        <label class="form-check-label">&nbsp;지출</label>
+      </div>
+      <label class="w-100 mt-4">
+        카테고리
+        <select class="form-select mt-2" v-model="category">
+          <option selected value="카테고리를 선택하세요">
+            카테고리를 선택하세요
+          </option>
+          <option value="식비">🍚 생활/식비</option>
+          <option value="주거">🏠 주거/통신</option>
+          <option value="교통">🚌 교통/이동</option>
+          <option value="취미">🎉 여가/취미</option>
+          <option value="건강">🩺 건강/의료</option>
+          <option value="가족">👪 가족/인간관계</option>
+          <option value="교육">👜 교육/자기계발</option>
+          <option value="금융">💳 금융/저축</option>
+          <option value="기타">🧷 기타</option>
+        </select>
+      </label>
+      <label class="w-100 mt-4">
+        날짜
+        <input
+          type="date"
+          class="form-control mt-2"
+          v-model="consumptionDate"
+        />
+      </label>
+      <label class="w-100 mt-4">
+        메모
+        <input type="text" class="form-control mt-2" v-model="memo" />
+      </label>
+      <button class="btn mt-5 text-white" @click="addMoneyItem">추가</button>
+      <button class="btn btn-secondary mt-3" @click="goHome">취소</button>
     </div>
-    <div class="form-check-inline">
-      <input
-        class="form-check-input"
-        type="radio"
-        name="moneyType"
-        v-model="type"
-        value="expense"
-      />
-      <label class="form-check-label">&nbsp;지출</label>
-    </div>
-    <label class="w-100 mt-4">
-      카테고리
-      <select class="form-select mt-2" v-model="category">
-        <option selected value="카테고리를 선택하세요">
-          카테고리를 선택하세요
-        </option>
-        <option value="food">🍚 생활/식비</option>
-        <option value="home">🏠 주거/통신</option>
-        <option value="transportation">🚌 교통/이동</option>
-        <option value="hobby">🎉 여가/취미</option>
-        <option value="health">🩺 건강/의료</option>
-        <option value="family">👪 가족/인간관계</option>
-        <option value="edu">👜 교육/자기계발</option>
-        <option value="money">💳 금융/저축</option>
-        <option value="guitar">🧷 기타</option>
-      </select>
-    </label>
-    <label class="w-100 mt-4">
-      날짜
-      <input type="date" class="form-control mt-2" v-model="consumptionDate" />
-    </label>
-    <label class="w-100 mt-4">
-      메모
-      <input type="text" class="form-control mt-2" v-model="memo" />
-    </label>
-    <button class="btn mt-5 text-white" @click="addMoneyItem">추가</button>
-    <button class="btn btn-secondary mt-3" @click="goHome">취소</button>
   </div>
 </template>
 
@@ -72,6 +78,9 @@ const type = ref('');
 
 //항목 추가 함수
 const addMoneyItem = async () => {
+  const userStore = useUserStore();
+  const currentUserId = userStore.userInfo[0]?.id;
+  console.log(userStore.userInfo);
   if (
     !amount.value ||
     category.value === '카테고리를 선택하세요' ||
@@ -89,7 +98,7 @@ const addMoneyItem = async () => {
 
   try {
     const newItem = {
-      userId: userId.value,
+      userId: currentUserId,
       amount: amount.value,
       category: category.value,
       consumptionDate: consumptionDate.value,
@@ -115,8 +124,6 @@ const goHome = () => {
 .list-container {
   width: 480px;
   height: 100vh;
-  border: 1px solid black;
-  border-radius: 1rem;
 }
 input {
   background-color: #f5f4f4;
