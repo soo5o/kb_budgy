@@ -1,28 +1,8 @@
 <template>
   <div class="container mt-3">
-    <!-- <div class="calendar-header">
-      <div class="summary d-flex justify-content-between text-nowrap">
-        <div class="text-center summary-block">
-          <div class="text-end fw-bold">수입</div>
-          <h5 class="month-income amount">
-            {{ totalIncome.toLocaleString() }}원
-          </h5>
-        </div>
-        <div class="text-center summary-block">
-          <div class="text-center fw-bold">지출</div>
-          <h5 class="month-expense amount">
-            {{ totalExpense.toLocaleString() }}원
-          </h5>
-        </div>
-        <div class="text-center summary-block">
-          <div class="text-center fw-bold">합계</div>
-          <h5 class="amount">
-            {{ (totalExpense + totalIncome).toLocaleString() }}원
-          </h5>
-        </div>
-      </div>
-    </div> -->
     <FullCalendar :options="calendarOptions" />
+    {{ totalExpense }}
+    {{ totalIncome }}
   </div>
 </template>
 <script setup>
@@ -32,22 +12,19 @@ import interactionPlugin from '@fullcalendar/interaction'; // for selectable
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 import { useUserStore } from '@/stores/user.js';
 const moneyList = ref([]);
 const totalExpense = ref(0);
 const totalIncome = ref(0);
 const selectedDate = ref(null);
 const userStore = useUserStore();
-const calendarOptions = {
-  locale: koLocale, // ← 한국어 설정
+const calendarOptions = reactive({
+  locale: koLocale,
   plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
   initialView: 'dayGridMonth',
   selectable: true,
   async datesSet(info) {
-    //마지막 주 안보이게 하기
-    //렌더링이 끝난 후 DOM 조작
-    //여기서 월별 데이터 합산을 미리 계산
     userStore.loadUserInfo(); // 페이지 로드 시 저장된 유저 정보 불러오기
     const userId = userStore.userInfo[0].id;
     console.log('userId', userId);
@@ -62,36 +39,37 @@ const calendarOptions = {
     totalIncome.value = moneyList.value.reduce((acc, cur) => {
       return cur.type === 'income' ? acc + parseInt(cur.amount) : acc;
     }, 0);
+    calendarOptions.events = generateDailySummaryEvents(moneyList.value); //일별 이벤트 생성
   },
 
   events: [
-    {
-      title: '-6,000',
-      start: '2025-04-07',
-      color: '#a069ba',
-      extendedProps: {
-        borderColor: '#a069ba',
-        opacity: 0.8,
-      },
-    },
-    {
-      title: '+5,000',
-      start: '2025-04-07',
-      color: '#46b894',
-      extendedProps: {
-        borderColor: '#46b894',
-        opacity: 0.8,
-      },
-    },
-    {
-      title: '+12,000,000',
-      start: '2025-04-08',
-      color: '#46b894',
-      extendedProps: {
-        borderColor: '#46b894',
-        opacity: 0.8,
-      },
-    },
+    // {
+    //   title: '-6,000',
+    //   start: '2025-04-07',
+    //   color: '#a069ba',
+    //   extendedProps: {
+    //     borderColor: '#a069ba',
+    //     opacity: 0.8,
+    //   },
+    // },
+    // {
+    //   title: '+5,000',
+    //   start: '2025-04-07',
+    //   color: '#46b894',
+    //   extendedProps: {
+    //     borderColor: '#46b894',
+    //     opacity: 0.8,
+    //   },
+    // },
+    // {
+    //   title: '+12,000,000',
+    //   start: '2025-04-08',
+    //   color: '#46b894',
+    //   extendedProps: {
+    //     borderColor: '#46b894',
+    //     opacity: 0.8,
+    //   },
+    // },
   ],
   eventDidMount(info) {
     const { borderColor, opacity } = info.event.extendedProps;
@@ -115,7 +93,52 @@ const calendarOptions = {
   dateClick(info) {
     selectedDate.value = info.dateStr; // 클릭한 날짜 저장
   },
-};
+});
+function generateDailySummaryEvents(moneyList) {
+  const dailyMap = {};
+
+  for (const item of moneyList) {
+    const date = item.date; // 'YYYY-MM-DD'
+    const amount = parseInt(item.amount);
+    if (!dailyMap[date]) {
+      dailyMap[date] = { income: 0, expense: 0 };
+    }
+    if (item.type === 'income') {
+      dailyMap[date].income += amount;
+    } else if (item.type === 'expense') {
+      dailyMap[date].expense += amount;
+    }
+  }
+
+  const events = [];
+
+  for (const [date, { income, expense }] of Object.entries(dailyMap)) {
+    if (income > 0) {
+      events.push({
+        title: `+${income.toLocaleString()}`,
+        start: date,
+        color: '#46b894',
+        extendedProps: {
+          borderColor: '#46b894',
+          opacity: 0.8,
+        },
+      });
+    }
+    if (expense > 0) {
+      events.push({
+        title: `-${expense.toLocaleString()}`,
+        start: date,
+        color: '#a069ba',
+        extendedProps: {
+          borderColor: '#a069ba',
+          opacity: 0.8,
+        },
+      });
+    }
+  }
+
+  return events;
+}
 </script>
 <style scoped>
 .amount {
