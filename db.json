@@ -82,6 +82,15 @@
     },
     {
       "userId": "1",
+      "amount": "150000",
+      "consumptionDate": "2025-04-01",
+      "category": "금융/저축",
+      "memo": "용돈",
+      "type": "income",
+      "id": "ad66"
+    },
+    {
+      "userId": "1",
       "amount": "5",
       "consumptionDate": "2025-04-01",
       "category": "교통",
