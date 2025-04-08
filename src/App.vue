@@ -1,7 +1,10 @@
 <script setup>
 import BottomNav from './components/BottomNav.vue';
 import AddPage from './pages/AddPage.vue';
+import { useUserStore } from '@/stores/user.js';
 
+const userStore = useUserStore();
+userStore.loadUserInfo();
 components: {
   AddPage;
 }
@@ -10,7 +13,7 @@ components: {
 <template>
   <div class="container">
     <router-view></router-view>
-    <BottomNav></BottomNav>
+    <BottomNav v-if="userStore.userInfo.length > 0" />
   </div>
 </template>
 

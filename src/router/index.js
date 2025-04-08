@@ -8,6 +8,7 @@ import AddPage from '@/pages/AddPage.vue';
 import DetailPage from '@/pages/DetailPage.vue';
 import ChartPage from '@/pages/ChartPage.vue';
 import CalendarPage from '@/pages/CalendarPage.vue';
+import ProfilePage from '@/pages/ProfilePage.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -55,6 +56,11 @@ const router = createRouter({
       path: '/calendar',
       name: 'calendar',
       component: CalendarPage,
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: ProfilePage,
     },
   ],
 });
