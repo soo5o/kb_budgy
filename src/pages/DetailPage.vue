@@ -7,11 +7,26 @@
       ></MoneySummary>
       <nav class="navbar navbar-light mt-3">
         <form class="container-fluid justify-content-start">
-          <button class="btn btn-outline-success me-2" type="button">
+          <button
+            @click="filterType = 'daily'"
+            class="btn btn-outline-success me-2"
+            type="button"
+          >
             일일
           </button>
-          <button class="btn btn-outline-secondary me-2" type="button">
+          <button
+            @click="filterType = 'weekly'"
+            class="btn btn-outline-secondary me-2"
+            type="button"
+          >
             주간
+          </button>
+          <button
+            @click="filterType = 'monthly'"
+            class="btn btn-outline-secondary me-2"
+            type="button"
+          >
+            월간
           </button>
           <AddButton></AddButton>
         </form>
@@ -49,6 +64,9 @@ import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user.js';
 import { ref, onMounted, computed, watch } from 'vue';
 import axios from 'axios';
+import dayjs from 'dayjs';
+import isoWeek from 'dayjs/plugin/isoWeek';
+dayjs.extend(isoWeek);
 components: {
   AddButton, MoneySummary;
 }
@@ -56,6 +74,7 @@ components: {
 const router = useRouter();
 const userStore = useUserStore();
 const moneyList = ref([]);
+const filterType = ref('daily');
 
 onMounted(() => {
   fetchData();
@@ -102,6 +121,8 @@ const totalExpense = computed(() => {
 
 //날짜 포맷 함수
 const formatDate = (dateStr) => {
+  if (filterType.value === 'weekly') return dateStr;
+  if (filterType.value === 'monthly') return `${dateStr.split('-')[1]}월`;
   const date = new Date(dateStr);
   return `${date.getMonth() + 1}월 ${date.getDate()}일 (${
     ['일', '월', '화', '수', '목', '금', '토'][date.getDay()]
@@ -112,11 +133,27 @@ const formatDate = (dateStr) => {
 const groupedData = computed(() => {
   const group = {};
   moneyList.value.forEach((item) => {
-    const date = item.consumptionDate;
-    if (!group[date]) {
-      group[date] = [];
+    const date = dayjs(item.consumptionDate);
+    let key;
+
+    switch (filterType.value) {
+      case 'daily':
+        key = date.format('YYYY-MM-DD');
+        break;
+      case 'weekly':
+        key = `${date.year()}년 ${date.isoWeek()}주차`;
+        break;
+      case 'monthly':
+        key = date.format('YYYY-MM');
+        break;
+      default:
+        key = date.format('YYYY-MM-DD');
     }
-    group[date].push(item);
+
+    if (!group[key]) {
+      group[key] = [];
+    }
+    group[key].push(item);
   });
   return group;
 });
