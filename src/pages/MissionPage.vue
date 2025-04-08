@@ -3,27 +3,38 @@
   <div class="allWrap" v-if="!isLoading">
     <h1>Mission Page</h1>
     <br />
-    <div id="viewGoal" class="card">
-      <h4>{{ info[0].name }}님의 목표 금액</h4>
-      <h1>{{ parseInt(userGoal.goal_amount).toLocaleString() }}</h1>
+    <div class="hasGoal" v-if="userGoal">
+      <div id="viewGoal" class="card">
+        <h4>{{ info[0].name }}님의 목표 금액</h4>
+        <h1>{{ parseInt(userGoal.goal_amount).toLocaleString() }}</h1>
+      </div>
+      <br />
+      <div class="d-flex justify-content-around">
+        <input type="button" class="btn btn-secondary" value="목표 삭제" />
+        <input type="button" class="btn btn-color" value="목표 수정" />
+        <!-- 해당 userId를 id값으로 하는 goal 데이터 있으면 수정,삭제버튼 -->
+      </div>
+      <br />
+      <div id="viewContinuous" class="card">
+        <h2 class="card-title">~일째 미션 성공 중...</h2>
+      </div>
+      <br />
     </div>
-    <br />
-    <div class="d-flex justify-content-around">
-      <input type="button" class="btn btn-secondary" value="목표 삭제" />
-      <input type="button" class="btn btn-color" value="목표 수정" />
-      <!-- 해당 userId를 id값으로 하는 goal 데이터 있으면 수정,삭제버튼 -->
-    </div>
+
     <!-- v-if 사용해서 해당 userId를 id값으로 
    하는 goal 데이터 없으면 목표 추가버튼 -->
-    <div class="d-flex justify-content-around">
-      <input type="button" class="btn btn-color" value="목표 추가" />
+    <div class="noGoal" v-else>
+      <div id="viewGoal" class="card">
+        <h4>{{ info[0].name }}님</h4>
+        <h1>목표를 추가해주세요</h1>
+      </div>
+      <br />
+      <div class="d-flex justify-content-around">
+        <input type="button" class="btn btn-color" value="목표 추가" />
+      </div>
     </div>
     <br />
 
-    <div id="viewContinuous" class="card">
-      <h2 class="card-title">~일째 미션 성공 중...</h2>
-    </div>
-    <br />
     <div id="viewCalendar">
       <v-date-picker v-model="selectedDate" is-inline :attributes="attrs">
       </v-date-picker>
@@ -59,16 +70,18 @@ onMounted(async () => {
     console.log('유저 정보 로드됨:', info.value);
     if (!info.value) {
       console.log('로그인x.');
-      // alert('로그인 후 이용 가능합니다.');
-      // router.go(-1);
       return;
     }
     console.log('로그인', info.value[0].id);
 
     const response = await axios.get('http://localhost:3000/goal');
     goals.value = response.data;
+    //로그인된 user id로 user의 goal 찾기
     userGoal.value = goals.value.find((g) => g.userId == info.value[0].id);
-    successDate.value = userGoal.value.successDate;
+    if (userGoal.value) {
+      //user에게 goal 있으면
+      successDate.value = userGoal.value.successDate;
+    }
   } catch (error) {
     console.error(error);
   } finally {
