@@ -1,4 +1,11 @@
 <template>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
   <!-- 로딩 완료 후-->
   <div class="allWrap" v-if="!isLoading">
     <h1>Mission Page</h1>
@@ -16,7 +23,10 @@
       </div>
       <br />
       <div id="viewContinuous" class="card">
-        <h2 class="card-title">~일째 미션 성공 중...</h2>
+        <h2 class="card-title">
+          <i class="fa-solid fa-thumbs-up"></i> 이번 달, 성공한 날
+          {{ successLength }}일!
+        </h2>
       </div>
       <br />
     </div>
@@ -64,6 +74,7 @@ const info = computed(() => userStore.userInfo);
 const goals = ref([]);
 const userGoal = ref(undefined);
 const successDate = ref([]);
+const successLength = ref(0);
 onMounted(async () => {
   try {
     await userStore.loadUserInfo();
@@ -81,6 +92,7 @@ onMounted(async () => {
     if (userGoal.value) {
       //user에게 goal 있으면
       successDate.value = userGoal.value.successDate;
+      successLength.value = successDate.value.length;
     }
   } catch (error) {
     console.error(error);
