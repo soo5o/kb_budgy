@@ -1,7 +1,27 @@
 <template>
-  프로필 페이지
-  <h2>{{ name }}님</h2>
-  <button class="btn btn-outline-danger" @click="logout">로그아웃</button>
+  <div class="container">
+    <img src="@/assets/logo.png" width="180px" />
+    <h3 class="text-center fw-bold mt-1 mb-3 ms-3">{{ name }}님</h3>
+    <!-- 비밀번호 변경 -->
+    <strong>비밀번호 변경</strong>
+    <input
+      type="password"
+      class="form-control"
+      placeholder="기존 비밀번호를 입력해주세요"
+    />
+    <input
+      type="password"
+      class="form-control"
+      placeholder="새로운 비밀번호를 입력해주세요"
+    />
+    <input
+      type="password"
+      class="form-control"
+      placeholder="새로운 비밀번호를 재입력해주세요"
+    />
+    <button class="btn w-100">변경</button>
+    <button class="btn w-100" @click="logout">로그아웃</button>
+  </div>
 </template>
 <script setup>
 import { useUserStore } from '@/stores/user.js';
@@ -17,3 +37,12 @@ function logout() {
   router.push('/login'); // 로그인 페이지로 이동
 }
 </script>
+<style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+</style>

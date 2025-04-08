@@ -90,7 +90,6 @@ button {
 }
 .login-button {
   background-color: #4fcca4;
-  color: white;
 }
 .sign-up-button {
   background-color: rgb(174, 174, 174);

@@ -1,9 +1,9 @@
 <template>
   <div class="container mt-3">
     <FullCalendar :options="calendarOptions" />
-    <div class="list-group">
+    <div class="list-group mb-3" ref="listRef">
       <div
-        class="list-group-item p-3"
+        class="list-group-item p-2"
         v-for="(item, index) in moneyList.filter(
           (m) => m.consumptionDate === selectedDate
         )"
@@ -11,9 +11,14 @@
       >
         <div class="list-detail ms-3">
           <div class="fw-bold">{{ item.memo }}</div>
-          <div class="text-secondary">{{ item.category }}</div>
+          <div class="text-secondary detail-category">{{ item.category }}</div>
         </div>
-        <div class="detail-amount me-4">
+        <div
+          class="detail-amount me-2"
+          :style="
+            item.type === 'income' ? { color: '#4fcca4' } : { color: 'black' }
+          "
+        >
           {{ item.type === 'income' ? '+' : '-'
           }}{{ parseInt(item.amount).toLocaleString() }}원
         </div>
@@ -28,7 +33,7 @@ import interactionPlugin from '@fullcalendar/interaction'; // for selectable
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-import { ref, reactive } from 'vue';
+import { ref, reactive, nextTick } from 'vue';
 import { useUserStore } from '@/stores/user.js';
 const moneyList = ref([]);
 const totalExpense = ref(0);
@@ -36,6 +41,7 @@ const totalIncome = ref(0);
 const selectedDate = ref(new Date().toISOString().slice(0, 10));
 const calendarEvents = ref([]);
 const userStore = useUserStore();
+const listRef = ref(null);
 const calendarOptions = reactive({
   locale: koLocale,
   plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
@@ -81,9 +87,11 @@ const calendarOptions = reactive({
   },
   dateClick(info) {
     selectedDate.value = info.dateStr; // 클릭한 날짜 저장
+    scrollToList();
   },
   eventClick(info) {
     selectedDate.value = info.event.startStr;
+    scrollToList();
   },
 });
 function generateDailySummaryEvents(moneyList) {
@@ -131,13 +139,47 @@ function generateDailySummaryEvents(moneyList) {
 
   return events;
 }
+function smoothScrollTo(targetY, duration = 800) {
+  const startY = window.scrollY;
+  const distance = targetY - startY;
+  const startTime = performance.now();
+
+  function step(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = easeInOutQuad(progress); // 부드러운 가속 감속
+
+    window.scrollTo(0, startY + distance * ease);
+
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    }
+  }
+
+  function easeInOutQuad(t) {
+    return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+  }
+
+  requestAnimationFrame(step);
+}
+function scrollToList() {
+  nextTick(() => {
+    if (listRef.value) {
+      const offsetTop =
+        listRef.value.getBoundingClientRect().top + window.scrollY;
+      smoothScrollTo(offsetTop, 600); // 0.6초 동안 천천히 이동
+    }
+  });
+}
 </script>
 <style scoped>
 .detail-amount {
   display: flex;
-  font-size: 20px;
-  font-weight: bold;
+  font-weight: 550;
   align-items: center;
+}
+.detail-category {
+  font-size: 13px;
 }
 .list-group-item {
   display: flex;
@@ -162,7 +204,7 @@ function generateDailySummaryEvents(moneyList) {
 ::v-deep .fc {
   /* height: 100%; */
   width: 100%;
-  height: 90vh;
+  min-height: 500px;
 }
 ::v-deep .fc-button {
   background-color: inherit;
@@ -175,11 +217,12 @@ function generateDailySummaryEvents(moneyList) {
 .container {
   margin: 0;
   padding: 0;
-  height: 100vh; /* 뷰포트 높이 전체 사용 */
+  height: auto;
   display: flex;
   flex-direction: column;
-  overflow: auto; /* 스크롤 없애기 */
-} /* 파란색 텍스트 없애기 */
+  overflow: auto;
+}
+/* 파란색 텍스트 없애기 */
 ::v-deep .fc-daygrid-day-number {
   color: #333; /* 기본 날짜 텍스트 색상 */
   text-decoration: none;
