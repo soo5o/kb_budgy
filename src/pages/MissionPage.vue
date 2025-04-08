@@ -39,7 +39,12 @@
     <br />
 
     <div id="viewCalendar">
-      <v-date-picker v-model="selectedDate" is-inline :attributes="attrs">
+      <v-date-picker
+        v-model="selectedDate"
+        is-inline
+        :attributes="attrs"
+        style="width: 400px"
+      >
       </v-date-picker>
     </div>
   </div>
