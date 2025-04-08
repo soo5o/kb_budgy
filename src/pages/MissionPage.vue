@@ -1,10 +1,11 @@
 <template>
-  <div class="allWrap">
+  <!-- 로딩 완료 후-->
+  <div class="allWrap" v-if="!isLoading">
     <h1>Mission Page</h1>
     <br />
     <div id="viewGoal" class="card">
-      <h4>목표 금액</h4>
-      <h1>50,000</h1>
+      <h4>{{ info[0].name }}님의 목표 금액</h4>
+      <h1>{{ parseInt(userGoal.goal_amount).toLocaleString() }}</h1>
     </div>
     <br />
     <div class="d-flex justify-content-around">
@@ -28,15 +29,54 @@
       </v-date-picker>
     </div>
   </div>
+  <!-- 로딩 중 -->
+  <div v-else class="loading">
+    <h2>로딩 중입니다...</h2>
+  </div>
 </template>
 
 <script setup>
 // pinia에서 user정보 가져오기
-// 로그인 안 되어있으면 로그인하라는 문구 띄우기
-import { ref, computed } from 'vue';
-const selectedDate = ref(null);
+import { useUserStore } from '@/stores/user.js';
+import { useRouter } from 'vue-router';
+import { ref, computed, onMounted } from 'vue';
+import axios from 'axios';
+const router = useRouter();
+const isLoading = ref(true);
 
-const successDate = ref([new Date('2025-04-06'), new Date('2025-04-01')]);
+const userStore = useUserStore();
+userStore.loadUserInfo(); // 페이지 로드 시 저장된 유저 정보 불러오기
+
+const info = computed(() => userStore.userInfo);
+
+//db.json에 있는 goal들 불러오기
+const goals = ref([]);
+const userGoal = ref(undefined);
+const successDate = ref([]);
+onMounted(async () => {
+  try {
+    await userStore.loadUserInfo();
+    console.log('유저 정보 로드됨:', info.value);
+    if (!info.value) {
+      console.log('로그인x.');
+      // alert('로그인 후 이용 가능합니다.');
+      // router.go(-1);
+      return;
+    }
+    console.log('로그인', info.value[0].id);
+
+    const response = await axios.get('http://localhost:3000/goal');
+    goals.value = response.data;
+    userGoal.value = goals.value.find((g) => g.userId == info.value[0].id);
+    successDate.value = userGoal.value.successDate;
+  } catch (error) {
+    console.error(error);
+  } finally {
+    isLoading.value = false;
+  }
+});
+
+const selectedDate = ref(null);
 const attrs = computed(() => [
   {
     key: 'mission-success',
@@ -73,5 +113,11 @@ const attrs = computed(() => [
 .btn-color {
   background-color: #4fcca4;
   color: #ffffff;
+}
+.loading {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.5rem;
+  color: #4fcca4;
 }
 </style>
