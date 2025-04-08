@@ -3,16 +3,22 @@
     <div class="flex items-center mb-4">
       <label class="mr-2 font-medium">월 선택:</label>
       <select v-model="selectedMonth" class="border rounded px-2 py-1 text-sm">
-        <option v-for="month in months" :key="month" :value="month">{{ month }}</option>
+        <option v-for="month in months" :key="month" :value="month">
+          {{ month }}
+        </option>
       </select>
     </div>
 
     <div class="mb-2 font-medium text-right">
-      총 소비: <span class="text-indigo-600">{{ totalAmount.toLocaleString() }}원</span>
+      총 소비:
+      <span class="text-indigo-600">{{ totalAmount.toLocaleString() }}원</span>
     </div>
 
     <div class="relative w-full" style="height: 220px">
-      <canvas ref="chartCanvas" class="absolute top-0 left-0 w-full h-full"></canvas>
+      <canvas
+        ref="chartCanvas"
+        class="absolute top-0 left-0 w-full h-full"
+      ></canvas>
     </div>
   </div>
 </template>
@@ -83,7 +89,9 @@ const renderChart = async () => {
   const filteredData =
     selectedMonth.value === '전체'
       ? allData
-      : allData.filter((item) => item.consumptionDate.startsWith(selectedMonth.value));
+      : allData.filter((item) =>
+          item.consumptionDate.startsWith(selectedMonth.value)
+        );
 
   const categoryMap = {};
   categories.forEach((category) => {
@@ -92,13 +100,20 @@ const renderChart = async () => {
 
   filteredData.forEach((item) => {
     const amount = parseInt(item.amount);
-    const category = categoryMap.hasOwnProperty(item.category) ? item.category : '기타';
+    const category = categoryMap.hasOwnProperty(item.category)
+      ? item.category
+      : '기타';
     categoryMap[category] += amount;
   });
 
-  totalAmount.value = filteredData.reduce((sum, item) => sum + parseInt(item.amount), 0);
+  totalAmount.value = filteredData.reduce(
+    (sum, item) => sum + parseInt(item.amount),
+    0
+  );
 
-  const filteredCategories = categories.filter((category) => categoryMap[category] > 0);
+  const filteredCategories = categories.filter(
+    (category) => categoryMap[category] > 0
+  );
   const labels = filteredCategories;
   const values = filteredCategories.map((category) => categoryMap[category]);
   const backgroundColors = filteredCategories.map((c) => backgroundColorMap[c]);
