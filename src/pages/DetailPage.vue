@@ -49,18 +49,19 @@
       </nav>
       <hr />
       <div v-for="(items, date) in groupedData" :key="date" class="mb-3">
-        <h6 class="mb-2">{{ formatDate(date) }}</h6>
+        <h6 class="mb-2 fw-bold">{{ formatDate(date) }}</h6>
         <ul class="list-group">
           <li
             v-for="item in items"
             :key="item.id"
-            class="list-group-item d-flex justify-content-between align-items-center"
+            class="list-group-item d-flex justify-content-between align-items-center p-3"
           >
             <div>
               <strong>{{ categoryEmoji(item.category) }}&nbsp;</strong>
               <small class="text-muted">{{ item.memo || '메모 없음' }}</small>
             </div>
             <span
+              class="fw-bold"
               :style="{ color: item.type === 'income' ? '#4fcca4' : 'black' }"
             >
               {{ item.type === 'income' ? '+' : '-'
