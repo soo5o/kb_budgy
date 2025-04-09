@@ -20,7 +20,7 @@
           type="button"
           class="btn btn-color"
           value="목표 수정"
-          @click="modifyGoal(info[0].id)"
+          @click="modifyGoal(info[0].id, 30000)"
         />
         <!-- 해당 userId를 id값으로 하는 goal 데이터 있으면 수정,삭제버튼 -->
       </div>
@@ -89,6 +89,7 @@ const successDate = ref([]);
 const successLength = ref([]);
 const userMoneyList = ref([]); //userId 기준 쓴 돈 기록들
 const savedDate = ref([]); //저장해둔 성공날짜들
+const mergedDates = ref([]); //savedDate와 successDate 중복값 제거 후 합칠 것
 
 onMounted(async () => {
   try {
@@ -134,22 +135,18 @@ onMounted(async () => {
           successDate.value.push(consume);
         }
       }
+      //savedDate와 successDate 겹치는 값 없애기 위해 합쳐서 set으로 중복값 제거
+      mergedDates.value = [
+        ...new Set([...successDate.value, ...savedDate.value]),
+      ];
 
       //이번 달 성공일수 계산
       function calSuccess() {
         let todayMonth = new Date().getMonth(); //현재 달 구하기
         let length = 0;
-        for (let suDate of successDate.value) {
-          //이번달 중 성공한 날
-          let suDateMonth = new Date(suDate).getMonth();
-          if (todayMonth == suDateMonth) {
-            length++;
-          }
-        }
-        for (let saDate of savedDate.value) {
-          //저장한 성공날 중 이번달
-          let saDateMonth = new Date(saDate).getMonth();
-          if (todayMonth == saDateMonth) {
+        for (let mgDate of mergedDates.value) {
+          let mgDateMonth = new Date(mgDate).getMonth();
+          if (todayMonth == mgDateMonth) {
             length++;
           }
         }
@@ -171,7 +168,7 @@ const attrs = computed(() => [
       color: 'green',
       fillMode: 'outline',
     },
-    dates: [...successDate.value, ...savedDate.value],
+    dates: mergedDates.value,
   },
 ]);
 
@@ -188,13 +185,24 @@ async function deleteGoal(userId) {
       `http://localhost:3000/goal/${userId}`,
       data
     );
-    userGoal.value = undefined; //화면에 반영하기 위해 userGoal 비워주기
+    console.log(userGoal.value);
+    userGoal.value.goal_amount = null; //화면에 반영하기 위해 userGoal 비워주기
   } catch (err) {
     console.log('deleteGoal error: ', err);
   }
 }
-async function modifyGoal(userId) {
+async function modifyGoal(userId, amount) {
   try {
+    const data = {
+      id: userId,
+      goal_amount: amount,
+      saved_date: successDate.value,
+    };
+    const response = await axios.put(
+      `http://localhost:3000/goal/${userId}`,
+      data
+    );
+    userGoal.value = data; //화면에 반영하기 위해 userGoal 수정
   } catch (err) {
     console.log('modifyGoal error: ', err);
   }
