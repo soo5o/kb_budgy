@@ -3,15 +3,25 @@
   <div class="allWrap" v-if="!isLoading">
     <h1>Mission Page</h1>
     <br />
-    <div class="hasGoal" v-if="userGoal">
+    <div class="hasGoal" v-if="userGoal.goal_amount != null">
       <div id="viewGoal" class="card">
         <h4>{{ info[0].name }}님의 목표 금액</h4>
         <h1>{{ parseInt(userGoal.goal_amount).toLocaleString() }}</h1>
       </div>
       <br />
       <div class="d-flex justify-content-around">
-        <input type="button" class="btn btn-secondary" value="목표 삭제" />
-        <input type="button" class="btn btn-color" value="목표 수정" />
+        <input
+          type="button"
+          class="btn btn-secondary"
+          value="목표 삭제"
+          @click="deleteGoal(info[0].id)"
+        />
+        <input
+          type="button"
+          class="btn btn-color"
+          value="목표 수정"
+          @click="modifyGoal(info[0].id)"
+        />
         <!-- 해당 userId를 id값으로 하는 goal 데이터 있으면 수정,삭제버튼 -->
       </div>
       <br />
@@ -33,7 +43,12 @@
       </div>
       <br />
       <div class="d-flex justify-content-around">
-        <input type="button" class="btn btn-color" value="목표 추가" />
+        <input
+          type="button"
+          class="btn btn-color"
+          value="목표 추가"
+          @click="addGoal"
+        />
       </div>
     </div>
     <br />
@@ -57,10 +72,8 @@
 <script setup>
 // pinia에서 user정보 가져오기
 import { useUserStore } from '@/stores/user.js';
-import { useRouter } from 'vue-router';
 import { ref, computed, onMounted } from 'vue';
 import axios from 'axios';
-const router = useRouter();
 const isLoading = ref(true);
 
 const userStore = useUserStore();
@@ -75,6 +88,7 @@ const userGoal = ref(undefined);
 const successDate = ref([]);
 const successLength = ref([]);
 const userMoneyList = ref([]); //userId 기준 쓴 돈 기록들
+const savedDate = ref([]); //저장해둔 성공날짜들
 
 onMounted(async () => {
   try {
@@ -89,12 +103,12 @@ onMounted(async () => {
     const response = await axios.get('http://localhost:3000/goal');
     goals.value = response.data;
     //로그인된 user id로 user의 goal 찾기
-    userGoal.value = goals.value.find((g) => g.userId == info.value[0].id);
+    userGoal.value = goals.value.find((g) => g.id == info.value[0].id);
     if (userGoal.value) {
       //미션 성공일 계산
+      savedDate.value = userGoal.value.saved_date; //저장되어있는 날짜
 
       //userId로 해당 user의 moneyList 가져옴
-      //http://localhost:3000/money?userId=1&type=expense
       const responseMoney = await axios.get(
         'http://localhost:3000/money?userId=' +
           info.value[0].id +
@@ -113,11 +127,9 @@ onMounted(async () => {
         }
         dayConsume[date] += amount;
       });
-      console.log(dayConsume);
 
       //goal의 goal_amount보다 money가 더 적으면 successDate 배열에 넣기
       for (const consume in dayConsume) {
-        console.log(`${consume} , ${dayConsume[consume]}`);
         if (userGoal.value.goal_amount >= dayConsume[consume]) {
           successDate.value.push(consume);
         }
@@ -128,10 +140,16 @@ onMounted(async () => {
         let todayMonth = new Date().getMonth(); //현재 달 구하기
         let length = 0;
         for (let suDate of successDate.value) {
+          //이번달 중 성공한 날
           let suDateMonth = new Date(suDate).getMonth();
-          console.log('today ', todayMonth, 'sudateMonth ', suDateMonth);
           if (todayMonth == suDateMonth) {
-            console.log('length++');
+            length++;
+          }
+        }
+        for (let saDate of savedDate.value) {
+          //저장한 성공날 중 이번달
+          let saDateMonth = new Date(saDate).getMonth();
+          if (todayMonth == saDateMonth) {
             length++;
           }
         }
@@ -153,9 +171,40 @@ const attrs = computed(() => [
       color: 'green',
       fillMode: 'outline',
     },
-    dates: successDate.value,
+    dates: [...successDate.value, ...savedDate.value],
   },
 ]);
+
+//클릭이벤트(목표 추가, 목표 수정, 목표 삭제)
+async function deleteGoal(userId) {
+  try {
+    //이전에 목표 성공한 내역들 저장하고 goal_amount null로
+    const data = {
+      id: userId,
+      goal_amount: null,
+      saved_date: successDate.value,
+    };
+    const response = await axios.put(
+      `http://localhost:3000/goal/${userId}`,
+      data
+    );
+    userGoal.value = undefined; //화면에 반영하기 위해 userGoal 비워주기
+  } catch (err) {
+    console.log('deleteGoal error: ', err);
+  }
+}
+async function modifyGoal(userId) {
+  try {
+  } catch (err) {
+    console.log('modifyGoal error: ', err);
+  }
+}
+async function addGoal() {
+  try {
+  } catch (err) {
+    console.log('addGoal error: ', err);
+  }
+}
 </script>
 
 <style scoped>
