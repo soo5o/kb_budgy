@@ -1,7 +1,6 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import 'bootstrap/dist/css/bootstrap.css';
-import '@/assets/main.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'flatpickr/dist/flatpickr.css';
 
