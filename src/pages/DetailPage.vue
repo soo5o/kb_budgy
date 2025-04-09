@@ -39,20 +39,7 @@
           >
             월간
           </button>
-          <button
-            @click="filterType = 'range'"
-            class="btn btn-outline-secondary me-2"
-            type="button"
-          >
-            기간별
-          </button>
-          <Flatpickr
-            v-if="filterType === 'range'"
-            class="my-2"
-            :range="true"
-            :format="(date) => dayjs(date).format('YYYY-MM-DD')"
-            v-model="dateRange"
-          ></Flatpickr>
+
           <AddButton></AddButton>
         </form>
       </nav>
@@ -92,8 +79,6 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import { DatePicker } from 'v-calendar';
-import Flatpickr from 'vue-flatpickr-component';
-import 'flatpickr/dist/flatpickr.css';
 
 dayjs.extend(isoWeek);
 components: {
@@ -161,26 +146,8 @@ const formatDate = (dateStr) => {
 
 //날짜별 리스트
 const groupedData = computed(() => {
-  if (!moneyList.value || moneyList.value.length === 0) return {};
-
-  let filteredList = [...moneyList.value];
-
-  if (filterType.value === 'range') {
-    const [start, end] = dateRange.value;
-    //시작 날짜 종료 날짜 둘 다 선택했을 때만 필터링
-    if (start && end) {
-      //dayjs는 문자열 날짜를 날짜 객체로 바꿔 줌
-      const startDate = dayjs(start).startOf('day');
-      const endDate = dayjs(end).endOf('day');
-      filteredList = filteredList.filter((item) => {
-        const d = dayjs(item.consumptionDate);
-        //시작 일보다 뒤인 날짜들만 남겨두기
-        return d.isSameOrAfter(startDate) && d.isSameOrBefore(endDate);
-      });
-    }
-  }
   const group = {};
-  filteredList.forEach((item) => {
+  moneyList.value.forEach((item) => {
     const date = dayjs(item.consumptionDate);
     let key;
 
@@ -205,18 +172,7 @@ const groupedData = computed(() => {
     }
     group[key].push(item);
   });
-  //이 때 그룹은 '2025-04-08': [항목들], '2025-04-05': [항목들], 이런 식으로 생김
-  //하지만 순서 보장 x
-  //따라서 객체를 배열로 바꾸는 코드
-  const sorted = Object.entries(group)
-    //날짜를 기준으로 내림차순 정렬
-    .sort((a, b) => (a[0] < b[0] ? 1 : -1))
-    //정렬된 배열을 다시 객체로
-    .reduce((acc, [key, val]) => {
-      acc[key] = val;
-      return acc;
-    }, {});
-  return sorted;
+  return group;
 });
 
 //이모지 매핑 함수
