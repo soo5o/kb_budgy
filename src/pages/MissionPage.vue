@@ -3,7 +3,7 @@
   <div class="allWrap" v-if="!isLoading">
     <h1>Mission Page</h1>
     <br />
-    <div class="hasGoal" v-if="userGoal.goal_amount != null">
+    <div class="hasGoal" v-if="userGoal && userGoal.goal_amount != null">
       <div id="viewGoal" class="card">
         <h4>{{ info[0].name }}님의 목표 금액</h4>
         <h1>{{ parseInt(userGoal.goal_amount).toLocaleString() }}</h1>
@@ -36,7 +36,7 @@
 
     <!-- v-if 사용해서 해당 userId를 id값으로 
    하는 goal 데이터 없으면 목표 추가버튼 -->
-    <div class="noGoal" v-else>
+    <div class="noGoal" v-else-if="userGoal">
       <div id="viewGoal" class="card">
         <h4>{{ info[0].name }}님</h4>
         <h3>목표를 추가해주세요</h3>
@@ -47,7 +47,14 @@
           type="button"
           class="btn btn-color"
           value="목표 추가"
-          @click="addGoal"
+          @click="showModal = true"
+        />
+        <AddGoalModal
+          :visible="showModal"
+          :userId="info[0].id"
+          :successDate="successDate"
+          @goal-added="addGoal"
+          @close="showModal = false"
         />
       </div>
     </div>
@@ -73,6 +80,9 @@
 // pinia에서 user정보 가져오기
 import { useUserStore } from '@/stores/user.js';
 import { ref, computed, onMounted } from 'vue';
+import AddGoalModal from '@/components/AddGoalModal.vue';
+const showModal = ref(false);
+
 import axios from 'axios';
 const isLoading = ref(true);
 
@@ -209,6 +219,9 @@ async function modifyGoal(userId, amount) {
 }
 async function addGoal() {
   try {
+    showModal.value = false;
+    isLoading.value = true;
+    location.reload();
   } catch (err) {
     console.log('addGoal error: ', err);
   }
