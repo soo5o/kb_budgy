@@ -189,7 +189,7 @@ async function deleteGoal(userId) {
     const data = {
       id: userId,
       goal_amount: null,
-      saved_date: successDate.value,
+      saved_date: mergedDates.value,
     };
     const response = await axios.put(
       `http://localhost:3000/goal/${userId}`,
