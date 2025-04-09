@@ -39,7 +39,7 @@
     <div class="noGoal" v-else>
       <div id="viewGoal" class="card">
         <h4>{{ info[0].name }}님</h4>
-        <h1>목표를 추가해주세요</h1>
+        <h3>목표를 추가해주세요</h3>
       </div>
       <br />
       <div class="d-flex justify-content-around">
@@ -214,7 +214,7 @@ async function addGoal() {
   text-align: center;
 }
 
-#viewGoal h1,
+#viewGoal h3,
 #viewGoal h4 {
   text-align: left;
   margin: 1rem;
