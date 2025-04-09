@@ -3,8 +3,8 @@
     {
       "id": "1",
       "email": "111@naver.com",
-      "name": "aaa",
-      "password": "aaaaa"
+      "password": "bbbbbbbb",
+      "name": "버기"
     },
     {
       "id": "2",
@@ -173,16 +173,14 @@
   ],
   "goal": [
     {
-      "userId": "1",
-      "goal_amount": "50000",
-      "successDate": "1",
-      "id": "05c3"
+      "id": "1",
+      "goal_amount": null,
+      "saved_date": ["2025-01-01", "2025-04-01", "2025-01-08"]
     },
     {
-      "userId": "2",
+      "id": "2",
       "goal_amount": "80000",
-      "successDate": "3",
-      "id": "5f25"
+      "saved_date": ""
     }
   ]
 }
