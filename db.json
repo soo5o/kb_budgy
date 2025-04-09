@@ -169,17 +169,22 @@
       "consumptionDate": "2025-04-08",
       "memo": "레알 마드리드 유니폼 샀다~~",
       "type": "expense"
+    },
+    {
+      "id": "7434",
+      "userId": "1",
+      "amount": 100000,
+      "category": "취미",
+      "consumptionDate": "2025-04-09",
+      "memo": "주식 투자 굳",
+      "type": "income"
     }
   ],
   "goal": [
     {
       "id": "1",
       "goal_amount": null,
-      "saved_date": [
-        "2025-01-01",
-        "2025-04-01",
-        "2025-01-08"
-      ]
+      "saved_date": ["2025-01-01", "2025-04-01", "2025-01-08"]
     },
     {
       "id": "2",
