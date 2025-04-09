@@ -24,7 +24,7 @@ import { defineProps, defineEmits } from 'vue';
 const props = defineProps({
   visible: Boolean,
   userId: String,
-  successDate: Array,
+  mergedDates: Array,
 });
 const emit = defineEmits(['goal-added', 'close']);
 
@@ -37,11 +37,14 @@ const resetForm = () => {
 const submitGoal = async () => {
   //금액 양수로만 받는 거 검사추가하기
   try {
+    const today = new Date().toISOString().split('T')[0];
     await axios.put(`http://localhost:3000/goal/${props.userId}`, {
       id: props.userId,
-      saved_date: props.successDate,
-      goal_amount: goal_amount.value,
+      saved_date: props.mergedDates,
+
+      goal_amount: { amount: goal_amount.value, start_date: today },
     });
+    console.log('props.mergeDates: ', props.mergedDates);
     emit('goal-added'); //부모에게 목표 추가 알림
     resetForm();
   } catch (err) {

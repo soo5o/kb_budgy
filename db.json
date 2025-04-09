@@ -174,16 +174,18 @@
   "goal": [
     {
       "id": "1",
-      "goal_amount": null,
-      "saved_date": [
-        "2025-01-01",
-        "2025-04-01",
-        "2025-01-08"
-      ]
+      "goal_amount": {
+        "start_date": "2025-04-01",
+        "amount": "40000"
+      },
+      "saved_date": ["2025-04-01", "2025-01-01", "2025-01-08"]
     },
     {
       "id": "2",
-      "goal_amount": "80000",
+      "goal_amount": {
+        "start_date": "2025-04-01",
+        "amount": "40000"
+      },
       "saved_date": ""
     }
   ]

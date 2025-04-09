@@ -6,7 +6,7 @@
     <div class="hasGoal" v-if="userGoal && userGoal.goal_amount != null">
       <div id="viewGoal" class="card">
         <h4>{{ info[0].name }}님의 목표 금액</h4>
-        <h1>{{ parseInt(userGoal.goal_amount).toLocaleString() }}</h1>
+        <h1>{{ parseInt(userGoal.goal_amount.amount).toLocaleString() }}</h1>
       </div>
       <br />
       <div class="d-flex justify-content-around">
@@ -52,7 +52,7 @@
         <AddGoalModal
           :visible="showModal"
           :userId="info[0].id"
-          :successDate="successDate"
+          :mergedDates="mergedDates"
           @goal-added="addGoal"
           @close="showModal = false"
         />
@@ -119,36 +119,56 @@ onMounted(async () => {
       //미션 성공일 계산
       savedDate.value = userGoal.value.saved_date; //저장되어있는 날짜
 
-      //userId로 해당 user의 moneyList 가져옴
-      const responseMoney = await axios.get(
-        'http://localhost:3000/money?userId=' +
-          info.value[0].id +
-          '&type=expense'
-      );
-      userMoneyList.value = responseMoney.data;
+      if (userGoal.value.goal_amount != null) {
+        //userGoal의 goal_amount의 amount가 null 이 아닐 때만 successDate 계산
+        //userId로 해당 user의 moneyList 가져옴
+        const responseMoney = await axios.get('http://localhost:3000/money', {
+          params: {
+            userId: info.value[0].id,
+            type: 'expense',
+          },
+        });
 
-      //moneyList 있으면 날짜별로 money구하기
-      const dayConsume = {};
+        //goal의 startDate 이후만 구하기
+        userMoneyList.value = responseMoney.data.filter((item) => {
+          return (
+            new Date(item.consumptionDate) >
+            new Date(userGoal.value.goal_amount.start_date)
+          );
+        });
 
-      userMoneyList.value.forEach((item) => {
-        const date = item.consumptionDate;
-        const amount = parseInt(item.amount);
-        if (!dayConsume[date]) {
-          dayConsume[date] = 0;
-        }
-        dayConsume[date] += amount;
-      });
+        console.log('userMoneyList(start이후인지확인)): ', userMoneyList.value);
 
-      //goal의 goal_amount보다 money가 더 적으면 successDate 배열에 넣기
-      for (const consume in dayConsume) {
-        if (userGoal.value.goal_amount >= dayConsume[consume]) {
-          successDate.value.push(consume);
+        //moneyList 있으면 날짜별로 money구하기
+        const dayConsume = {};
+
+        userMoneyList.value.forEach((item) => {
+          const date = item.consumptionDate;
+          const amount = parseInt(item.amount);
+          if (!dayConsume[date]) {
+            dayConsume[date] = 0;
+          }
+          dayConsume[date] += amount;
+        });
+
+        console.log(dayConsume);
+
+        //goal의 goal_amount보다 money가 더 적으면 successDate 배열에 넣기
+        for (const consume in dayConsume) {
+          if (userGoal.value.goal_amount.amount >= dayConsume[consume]) {
+            successDate.value.push(consume);
+            console.log('push ', successDate.value);
+          }
         }
       }
+
+      console.log('savedDate: ', savedDate.value);
       //savedDate와 successDate 겹치는 값 없애기 위해 합쳐서 set으로 중복값 제거
-      mergedDates.value = [
-        ...new Set([...successDate.value, ...savedDate.value]),
-      ];
+      if (savedDate.value != undefined) {
+        mergedDates.value = [
+          ...new Set([...successDate.value, ...savedDate.value]),
+        ];
+      }
 
       //이번 달 성공일수 계산
       function calSuccess() {
@@ -195,7 +215,7 @@ async function deleteGoal(userId) {
       `http://localhost:3000/goal/${userId}`,
       data
     );
-    console.log(userGoal.value);
+    console.log('deleteGoal response: ', response);
     userGoal.value.goal_amount = null; //화면에 반영하기 위해 userGoal 비워주기
   } catch (err) {
     console.log('deleteGoal error: ', err);
@@ -206,12 +226,13 @@ async function modifyGoal(userId, amount) {
     const data = {
       id: userId,
       goal_amount: amount,
-      saved_date: successDate.value,
+      saved_date: mergedDates.value,
     };
     const response = await axios.put(
       `http://localhost:3000/goal/${userId}`,
       data
     );
+    console.log('modifyGoal response: ', response);
     userGoal.value = data; //화면에 반영하기 위해 userGoal 수정
   } catch (err) {
     console.log('modifyGoal error: ', err);
