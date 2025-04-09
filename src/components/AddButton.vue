@@ -1,5 +1,7 @@
 <template>
-  <button @click="goToAddPage" class="addBtn">+</button>
+  <button @click="goToAddPage" class="addBtn">
+    <i class="fa-solid fa-plus"></i>
+  </button>
 </template>
 
 <script setup>
