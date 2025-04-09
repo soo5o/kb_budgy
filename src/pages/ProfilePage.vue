@@ -33,7 +33,9 @@
           placeholder="새로운 비밀번호를 재입력해주세요"
           v-model="rePwd"
         />
-        <div class="mt-3 alert alert-success">회원정보가 변경되었습니다.</div>
+        <div v-if="showSuccessAlert" class="mt-3 alert alert-success">
+          회원정보가 변경되었습니다.
+        </div>
         <div class="text-danger ms-1 mt-1">{{ msg }}</div>
         <button class="fw-bold w-100 change-btn btns" @click="changeInfo">
           변경하기
@@ -65,7 +67,7 @@ const router = useRouter();
 const userStore = useUserStore();
 const myInfo = userStore.userInfo[0];
 const name = computed(() => userStore.userInfo[0]?.name || '');
-
+const showSuccessAlert = ref(false); // alert 표시 여부
 nextInfo.value.name = myInfo.name;
 function logout() {
   localStorage.clear(); // 전체 로컬스토리지 초기화
@@ -106,11 +108,15 @@ const changeInfo = async () => {
   if (validateInfoForm()) {
     const response = await userStore.changeUserInfo(myInfo, nextInfo.value);
     if (response) {
-      alert('개인정보 수정 완료!');
-      validatePwd.value = false;
-      nextInfo.value.password = '';
-      rePwd.value = '';
-      router.push('/profile');
+      showSuccessAlert.value = true;
+
+      setTimeout(() => {
+        showSuccessAlert.value = false;
+        validatePwd.value = false;
+        nextInfo.value.password = '';
+        rePwd.value = '';
+        router.push('/profile');
+      }, 1500);
     }
   }
 };
