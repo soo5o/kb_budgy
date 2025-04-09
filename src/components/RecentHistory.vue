@@ -11,7 +11,7 @@
           <strong>{{ categoryEmoji(item.category) }}&nbsp;</strong>
           <small>{{ item.memo || '메모 없음' }}</small>
         </div>
-        <span :class="item.type === 'income' ? 'text-primary' : 'text-danger'"
+        <span :style="{ color: item.type === 'income' ? '#4fcca4' : 'black' }"
           >{{ item.type === 'income' ? '+' : '-'
           }}{{ Number(item.amount).toLocaleString() }}원</span
         >
