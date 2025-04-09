@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4">
+  <div class="p-3">
     <div class="flex items-center mb-4">
       <label class="mr-2 font-medium">월 선택:</label>
       <select v-model="selectedMonth" class="border rounded px-2 py-1 text-sm">
@@ -9,16 +9,115 @@
       </select>
     </div>
 
+    <!-- 수입/지출 표시 -->
     <div class="mb-2 font-medium text-right">
-      총 소비:
-      <span class="text-indigo-600">{{ totalAmount.toLocaleString() }}원</span>
+      <template v-if="selectedMonth === '전체'">
+        {{ chartType === 'expense' ? '총 지출:' : '총 수입:' }}
+        <span class="text-indigo-600">{{ totalAmount.toLocaleString() }}원</span>
+      </template>
+      <template v-else>
+        {{ chartType === 'expense' ? '지출' : '수입' }}
+        <span class="text-sm text-gray-500 ml-1">({{ selectedMonth }}) : </span>
+        <span class="text-indigo-600">{{ totalAmount.toLocaleString() }}원</span>
+      </template>
     </div>
 
-    <div class="relative w-full" style="height: 220px">
-      <canvas
-        ref="chartCanvas"
-        class="absolute top-0 left-0 w-full h-full"
-      ></canvas>
+    <!-- 버튼 부분 -->
+    <div class="button-group" style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-bottom: 1rem">
+      <button
+        @click="chartType = 'expense'"
+        :style="
+          chartType === 'expense'
+            ? 'background-color: #4FCCA4; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-weight: bold;'
+            : 'background-color: white; color: #4FCCA4; border: 1px solid #4FCCA4; padding: 6px 12px; border-radius: 4px;'
+        "
+      >
+        지출 차트
+      </button>
+      <button
+        @click="chartType = 'income'"
+        :style="
+          chartType === 'income'
+            ? 'background-color: #4FCCA4; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-weight: bold;'
+            : 'background-color: white; color: #4FCCA4; border: 1px solid #4FCCA4; padding: 6px 12px; border-radius: 4px;'
+        "
+      >
+        수입 차트
+      </button>
+    </div>
+
+    <!-- 차트 부분 -->
+    <div class="relative w-full" style="height: 240px">
+      <canvas ref="chartCanvas" class="absolute top-0 left-0 w-full h-full"></canvas>
+    </div>
+
+    <!-- 필터링 -->
+    <label class="ml-4 flex items-center text-sm">
+      <input type="checkbox" v-model="showByCategory" class="mr-1" />
+      카테고리별 보기
+    </label>
+
+    <!-- 기존 차트 아래에 리스트 추가 -->
+    <div class="mt-4">
+      <ul class="list-group">
+        <template v-if="showByCategory">
+          <li
+            v-for="category in filteredCategories"
+            :key="category"
+            class="list-group-item d-flex justify-content-between align-items-center"
+          >
+            <div class="d-flex align-items-center">
+              <span
+                class="rounded-circle me-2"
+                :style="{
+                  backgroundColor: backgroundColorMap[category],
+                  width: '12px',
+                  height: '12px',
+                  display: 'inline-block',
+                }"
+              ></span>
+              <span class="text-sm text-dark">{{ category }}</span>
+            </div>
+            <span class="badge bg-primary rounded-pill text-sm ms-3">
+              {{ categoryMap[category].toLocaleString() }}원
+            </span>
+          </li>
+        </template>
+
+        <template v-else>
+          <li
+            v-for="(item, index) in filteredItems"
+            :key="index"
+            class="list-group-item"
+            @click="toggleTooltip(index)"
+            style="cursor: pointer"
+          >
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="text-truncate">
+                <span
+                  class="rounded-circle me-2"
+                  :style="{
+                    backgroundColor: backgroundColorMap[item.category],
+                    width: '12px',
+                    height: '12px',
+                    display: 'inline-block',
+                  }"
+                ></span>
+                <span class="text-muted small">{{ item.category }} · {{ item.date }}</span>
+              </div>
+              <span class="badge bg-primary rounded-pill"> {{ item.amount.toLocaleString() }}원 </span>
+            </div>
+
+            <!-- 툴팁 -->
+            <div
+              v-if="tooltipIndex === index"
+              class="mt-2 px-3 py-2 bg-gray-100 text-sm text-gray-700 rounded border border-gray-300"
+            >
+              {{ item.memo || '메모가 없습니다.' }}
+            </div>
+          </li>
+        </template>
+      </ul>
     </div>
   </div>
 </template>
@@ -26,13 +125,28 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { Chart, registerables } from 'chart.js';
-import { useRoute } from 'vue-router';
 import axios from 'axios';
+import { useUserStore } from '@/stores/user';
 
 Chart.register(...registerables);
 
-const route = useRoute();
 const chartCanvas = ref(null);
+
+const categoryMap = ref({});
+const filteredCategories = ref([]);
+
+const chartType = ref('expense'); // 'expense' 또는 'income'
+const showByCategory = ref(true); // true면 카테고리별, false면 항목별
+const filteredItems = ref([]); // 항목별로 보여줄 리스트
+
+const userStore = useUserStore();
+
+const tooltipIndex = ref(null);
+
+const toggleTooltip = (index) => {
+  tooltipIndex.value = tooltipIndex.value === index ? null : index;
+};
+
 let chartInstance = null;
 
 const selectedMonth = ref('전체');
@@ -54,73 +168,77 @@ const months = ref([
   '2025-12',
 ]);
 
-const categories = [
-  '식비',
-  '주거/통신',
-  '교통',
-  '여가/취미',
-  '쇼핑/패션',
-  '건강/의료',
-  '가족/인간관계',
-  '교육/자기계발',
-  '금융/저축',
-  '기타',
-];
+const categories = ['식비', '주거', '교통', '취미', '쇼핑', '건강', '가족', '교육', '금융', '기타'];
 
 const backgroundColorMap = {
   식비: '#4f46e5',
-  '주거/통신': '#06b6d4',
+  주거: '#06b6d4',
   교통: '#facc15',
-  '여가/취미': '#f472b6',
-  '쇼핑/패션': '#a78bfa',
-  '건강/의료': '#34d399',
-  '가족/인간관계': '#fb923c',
-  '교육/자기계발': '#f43f5e',
-  '금융/저축': '#22c55e',
+  취미: '#f472b6',
+  쇼핑: '#a78bfa',
+  건강: '#34d399',
+  가족: '#fb923c',
+  교육: '#f43f5e',
+  금융: '#22c55e',
   기타: '#0ea5e9',
 };
 
 const renderChart = async () => {
-  const userId = route.params.userId;
+  userStore.loadUserInfo();
+  const user = userStore.userInfo[0];
 
+  if (!user) {
+    alert('접근 권한이 없습니다.');
+    return;
+  }
+
+  const userId = user.id;
   const res = await axios.get(`http://localhost:3000/money?userId=${userId}`);
   const allData = res.data;
 
-  const filteredData =
-    selectedMonth.value === '전체'
-      ? allData
-      : allData.filter((item) =>
-          item.consumptionDate.startsWith(selectedMonth.value)
-        );
+  const targetData = allData.filter((item) => {
+    const matchMonth = selectedMonth.value === '전체' || item.consumptionDate.startsWith(selectedMonth.value);
+    const matchType = chartType.value ? item.type === chartType.value : true;
+    return matchMonth && matchType;
+  });
 
-  const categoryMap = {};
+  const map = {};
   categories.forEach((category) => {
-    categoryMap[category] = 0;
+    map[category] = 0;
   });
 
-  filteredData.forEach((item) => {
+  targetData.forEach((item) => {
     const amount = parseInt(item.amount);
-    const category = categoryMap.hasOwnProperty(item.category)
-      ? item.category
-      : '기타';
-    categoryMap[category] += amount;
+    if (!isNaN(amount)) {
+      const category = map.hasOwnProperty(item.category) ? item.category : '기타';
+      map[category] += amount;
+    }
   });
 
-  totalAmount.value = filteredData.reduce(
-    (sum, item) => sum + parseInt(item.amount),
-    0
-  );
+  totalAmount.value = targetData.reduce((sum, item) => {
+    const amount = parseInt(item.amount);
+    return isNaN(amount) ? sum : sum + amount;
+  }, 0);
 
-  const filteredCategories = categories.filter(
-    (category) => categoryMap[category] > 0
-  );
-  const labels = filteredCategories;
-  const values = filteredCategories.map((category) => categoryMap[category]);
-  const backgroundColors = filteredCategories.map((c) => backgroundColorMap[c]);
+  categoryMap.value = map;
 
-  if (chartInstance) {
-    chartInstance.destroy();
-  }
+  filteredItems.value = targetData
+    .map((item) => ({
+      category: item.category,
+      content: item.content,
+      amount: parseInt(item.amount),
+      date: item.consumptionDate,
+      memo: item.memo || '',
+    }))
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  filteredCategories.value = categories.filter((category) => categoryMap.value[category] > 0);
+  const labels = filteredCategories.value;
+  const values = labels.map((category) => categoryMap.value[category]);
+  const backgroundColors = labels.map((c) => backgroundColorMap[c]);
+
+  if (chartInstance) chartInstance.destroy();
+
   chartInstance = new Chart(chartCanvas.value, {
     type: 'doughnut',
     data: {
@@ -138,9 +256,7 @@ const renderChart = async () => {
       plugins: {
         legend: {
           position: 'bottom',
-          labels: {
-            font: { size: 14 },
-          },
+          labels: { font: { size: 14 } },
         },
       },
     },
@@ -148,7 +264,7 @@ const renderChart = async () => {
 };
 
 onMounted(renderChart);
-watch(selectedMonth, renderChart);
+watch([selectedMonth, chartType], renderChart);
 </script>
 
 <style scoped>

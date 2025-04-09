@@ -48,9 +48,10 @@ const router = createRouter({
       component: DetailPage,
     },
     {
-      path: '/chart/:userId',
-      name: 'chart',
+      path: '/chart',
+      name: 'ChartPage',
       component: ChartPage,
+      meta: { requiresAuth: true },
     },
     {
       path: '/calendar',
