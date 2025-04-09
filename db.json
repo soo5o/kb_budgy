@@ -196,6 +196,15 @@
       "consumptionDate": "2025-04-09",
       "memo": "보험료 반환",
       "type": "income"
+    },
+    {
+      "id": "2430",
+      "userId": "1",
+      "amount": 10,
+      "category": "식비",
+      "consumptionDate": "2025-04-10",
+      "memo": "",
+      "type": "income"
     }
   ],
   "goal": [

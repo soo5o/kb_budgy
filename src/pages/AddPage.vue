@@ -28,8 +28,8 @@
       <label class="w-100 mt-4">
         카테고리
         <select class="form-select mt-2" v-model="category">
-          <option selected value="카테고리를 선택하세요">
-            카테고리를 선택하세요
+          <option disabled value="카테고리를 선택하세요.">
+            카테고리를 선택하세요.
           </option>
           <option value="식비">🍚 생활/식비</option>
           <option value="주거">🏠 주거/통신</option>
@@ -77,10 +77,10 @@ const router = useRouter();
 //인풋 창에서 입력 받을 값
 const userId = ref('');
 const amount = ref(0);
-const category = ref('');
+const category = ref('카테고리를 선택하세요.');
 const consumptionDate = ref('');
 const memo = ref('');
-const type = ref('');
+const type = ref('income');
 
 //항목 추가 함수
 const addMoneyItem = async () => {
