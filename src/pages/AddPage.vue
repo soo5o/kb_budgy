@@ -116,7 +116,7 @@ const addMoneyItem = async () => {
 };
 
 const goHome = () => {
-  router.push('/home');
+  router.push('/detail');
 };
 </script>
 
