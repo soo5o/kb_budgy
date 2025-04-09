@@ -55,7 +55,13 @@
         <input type="text" class="form-control mt-2" v-model="memo" />
       </label>
       <button class="btn mt-5 text-white" @click="addMoneyItem">추가</button>
-      <button class="btn btn-secondary mt-3" @click="goHome">취소</button>
+      <button
+        class="btn mt-3 text-white"
+        style="background-color: rgb(174, 174, 174)"
+        @click="goHome"
+      >
+        취소
+      </button>
     </div>
   </div>
 </template>
@@ -122,8 +128,8 @@ const goHome = () => {
 
 <style scoped>
 .list-container {
-  width: 480px;
-  height: 100vh;
+  width: 100%;
+  margin: 0 auto;
 }
 input {
   background-color: #f5f4f4;

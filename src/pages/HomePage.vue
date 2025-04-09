@@ -1,8 +1,8 @@
 <!-- HomePage.vue -->
 <template>
-  <div class="d-flex justify-content-center">
+  <div class="d-flex justify-content-center mb-3">
     <div class="home-container">
-      <TotalAssetBox :total="netAsset"></TotalAssetBox>
+      <TotalAssetBox class="mt-3" :total="netAsset"></TotalAssetBox>
       <RecentHistory :items="recentItems"></RecentHistory>
       <div class="text-end mt-3">
         <button class="btn btn-custom w-100" @click="goToDetail">더보기</button>
@@ -67,8 +67,8 @@ const goToDetail = () => {
 
 <style scoped>
 .home-container {
-  width: 480px;
-  padding: 2rem;
+  width: 100%;
+  margin: 0 auto;
 }
 .btn-custom {
   background-color: #f7fbf9;
