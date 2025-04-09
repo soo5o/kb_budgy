@@ -1,7 +1,8 @@
 <template>
   <div v-if="visible" class="modal-overlay">
     <div class="custom_modal">
-      <h2>목표 금액 설정</h2>
+      <h2 v-if="mode === 'add'">목표 금액 설정</h2>
+      <h2 v-else-if="mode === 'modify'">목표 금액 수정</h2>
       <form @submit.prevent="submitGoal">
         <input
           v-model="goal_amount"
@@ -25,6 +26,7 @@ const props = defineProps({
   visible: Boolean,
   userId: String,
   mergedDates: Array,
+  mode: String,
 });
 const emit = defineEmits(['goal-added', 'close']);
 
@@ -41,7 +43,6 @@ const submitGoal = async () => {
     await axios.put(`http://localhost:3000/goal/${props.userId}`, {
       id: props.userId,
       saved_date: props.mergedDates,
-
       goal_amount: { amount: goal_amount.value, start_date: today },
     });
     console.log('props.mergeDates: ', props.mergedDates);

@@ -16,12 +16,28 @@
           value="목표 삭제"
           @click="deleteGoal(info[0].id)"
         />
-        <input
+        <!-- <input
           type="button"
           class="btn btn-color"
           value="목표 수정"
           @click="modifyGoal(info[0].id, 30000)"
+        /> -->
+
+        <input
+          type="button"
+          class="btn btn-color"
+          value="목표 수정"
+          @click="showModal = true"
         />
+        <AddGoalModal
+          :visible="showModal"
+          :userId="info[0].id"
+          :mergedDates="mergedDates"
+          :mode="'modify'"
+          @goal-added="addGoal"
+          @close="showModal = false"
+        />
+
         <!-- 해당 userId를 id값으로 하는 goal 데이터 있으면 수정,삭제버튼 -->
       </div>
       <br />
@@ -53,6 +69,7 @@
           :visible="showModal"
           :userId="info[0].id"
           :mergedDates="mergedDates"
+          :mode="'add'"
           @goal-added="addGoal"
           @close="showModal = false"
         />
