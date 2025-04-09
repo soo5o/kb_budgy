@@ -71,10 +71,10 @@ const goToDetail = () => {
   margin: 0 auto;
 }
 .btn-custom {
-  background-color: #f7fbf9;
+  background-color: #fdfdfd;
   color: #4fcca4;
   border: 1px solid #4fcca4;
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 1rem;
   font-weight: 600;
   transition: all 0.2s ease-in-out;
