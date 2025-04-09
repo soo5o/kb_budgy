@@ -295,8 +295,6 @@ canvas {
   position: relative;
   padding: 16px;
   background-color: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
   margin: 16px auto;
   transition: transform 0.2s ease;
 }
