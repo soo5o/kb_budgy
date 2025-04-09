@@ -1,6 +1,7 @@
 <template>
   <div class="container mt-3">
     <FullCalendar :options="calendarOptions" />
+    <div class="fw-bold ms-3 mb-2">{{ selectedDate }}</div>
     <div class="list-group mb-3" ref="listRef">
       <div
         class="list-group-item p-2"
@@ -49,7 +50,6 @@ const calendarOptions = reactive({
   selectable: true,
   async datesSet(info) {
     const userId = userStore.userInfo[0].id;
-    console.log('userId', userId);
     const currentDate = new Date(info.view.currentStart); // 현재 보이는 시작 날짜
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth() + 1;
