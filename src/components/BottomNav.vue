@@ -45,7 +45,7 @@ const isHiddenPage = computed(() => hiddenPaths.includes(route.path));
   position: fixed;
   bottom: 0;
   left: 0;
-  right: 0;
+  width: 100%;
   height: 64px;
   background-color: #fff;
   border-top: 1px solid #e5e7eb;
@@ -73,7 +73,7 @@ const isHiddenPage = computed(() => hiddenPaths.includes(route.path));
 
 .btn-tabbar.selected {
   color: #4fcca4;
-  font-weight: 600;
+  font-weight: bold;
   background-color: #e0e7ff;
 }
 </style>
