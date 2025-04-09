@@ -1,12 +1,11 @@
 <template>
   <!-- 로딩 완료 후-->
   <div class="allWrap" v-if="!isLoading">
-    <h1>Mission Page</h1>
     <br />
     <div class="hasGoal" v-if="userGoal && userGoal.goal_amount != null">
       <div id="viewGoal" class="card">
         <h4>{{ info[0].name }}님의 목표 금액</h4>
-        <h1>{{ parseInt(userGoal.goal_amount.amount).toLocaleString() }}</h1>
+        <h1>{{ parseInt(userGoal.goal_amount.amount).toLocaleString() }} 원</h1>
       </div>
       <br />
       <div class="d-flex justify-content-around">
@@ -16,13 +15,6 @@
           value="목표 삭제"
           @click="deleteGoal(info[0].id)"
         />
-        <!-- <input
-          type="button"
-          class="btn btn-color"
-          value="목표 수정"
-          @click="modifyGoal(info[0].id, 30000)"
-        /> -->
-
         <input
           type="button"
           class="btn btn-color"
@@ -78,12 +70,7 @@
     <br />
 
     <div id="viewCalendar">
-      <v-date-picker
-        v-model="selectedDate"
-        is-inline
-        :attributes="attrs"
-        style="width: 400px"
-      >
+      <v-date-picker v-model="selectedDate" is-inline :attributes="attrs">
       </v-date-picker>
     </div>
   </div>
@@ -268,9 +255,11 @@ async function addGoal() {
 
 <style scoped>
 .allWrap {
-  margin: 1rem;
-  padding: 1rem;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 #viewGoal h3,
