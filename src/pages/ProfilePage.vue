@@ -1,49 +1,51 @@
 <!-- ProfilePage.vue -->
 <template>
-  <div class="container">
+  <div class="container pt-5">
     <button class="btn fw-bold logout-btn" @click="logout">로그아웃</button>
-    <!-- <img src="@/assets/logo.png" width="120px" /> -->
-    <h3 class="text-center fw-bold mt-1 mb-3 ms-3">{{ name }}님</h3>
-    <div class="w-100 ps-2 fw-bold">개인정보 변경</div>
-    <div v-if="!validatePwd" class="w-100">
-      <input
-        type="password"
-        class="form-control p-2"
-        placeholder="현재 비밀번호를 입력해주세요"
-        v-model="currentPwd"
-      />
-      <div class="text-danger ms-1 mt-1" v-if="alertDisplay">
-        비밀번호가 일치하지 않습니다.
+    <h1 class="text-center fw-bolder mt-5 mb-5 ms-3">{{ name }}님</h1>
+    <div class="w-100 ps-2 mt-5 fw-bold">개인정보 변경</div>
+    <transition name="fade" mode="out-in">
+      <div v-if="!validatePwd" class="w-100">
+        <input
+          type="password"
+          class="form-control p-2"
+          placeholder="현재 비밀번호를 입력해주세요"
+          v-model="currentPwd"
+        />
+        <div class="text-danger ms-1 mt-1" v-if="alertDisplay">
+          비밀번호가 일치하지 않습니다.
+        </div>
+        <button class="w-100 fw-bold check-btn btns" @click="checkPwd">
+          확인
+        </button>
       </div>
-      <button class="w-100 fw-bold check-btn btns" @click="checkPwd">
-        확인
-      </button>
-    </div>
-    <div class="w-100" v-else>
-      <input type="text" class="form-control p-2" v-model="nextInfo.name" />
-      <input
-        type="password"
-        class="form-control p-2 mt-2 mb-3"
-        placeholder="새로운 비밀번호를 입력해주세요"
-        v-model="nextInfo.password"
-      />
-      <input
-        type="password"
-        class="form-control p-2"
-        placeholder="새로운 비밀번호를 재입력해주세요"
-        v-model="rePwd"
-      />
-      <div class="text-danger ms-1 mt-1">{{ msg }}</div>
-      <button class="fw-bold w-100 change-btn btns" @click="changeInfo">
-        변경하기
-      </button>
-      <button
-        class="fw-bold w-100 cancel-btn btns"
-        @click="validatePwd = false"
-      >
-        취소
-      </button>
-    </div>
+      <div class="w-100" v-else>
+        <input type="text" class="form-control p-2" v-model="nextInfo.name" />
+        <input
+          type="password"
+          class="form-control p-2 mt-2 mb-3"
+          placeholder="새로운 비밀번호를 입력해주세요"
+          v-model="nextInfo.password"
+        />
+        <input
+          type="password"
+          class="form-control p-2"
+          placeholder="새로운 비밀번호를 재입력해주세요"
+          v-model="rePwd"
+        />
+        <div class="mt-3 alert alert-success">회원정보가 변경되었습니다.</div>
+        <div class="text-danger ms-1 mt-1">{{ msg }}</div>
+        <button class="fw-bold w-100 change-btn btns" @click="changeInfo">
+          변경하기
+        </button>
+        <button
+          class="fw-bold w-100 cancel-btn btns"
+          @click="validatePwd = false"
+        >
+          취소
+        </button>
+      </div>
+    </transition>
   </div>
 </template>
 <script setup>
@@ -114,11 +116,17 @@ const changeInfo = async () => {
 };
 </script>
 <style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.1s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 .container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   gap: 10px;
 }
 .btns {

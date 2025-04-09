@@ -2,48 +2,48 @@
 <template>
   <form @submit.prevent="handleSubmit">
     <div class="container d-flex justify-content-center align-content-center">
-      <h1 class="fw-bolder text-center mb-5">Sign Up</h1>
+      <h1 class="fw-bolder text-center mb-5">회원가입</h1>
       <div>
-        <div class="m-2 fw-bold">Name</div>
+        <div class="m-2 fw-bold">이름</div>
         <input
           class="form-control"
           type="text"
-          placeholder="Enter your Name"
+          placeholder="이름을 입력해주세요."
           v-model="userInfo.name"
         />
       </div>
       <div>
-        <div class="m-2 fw-bold">Email</div>
+        <div class="m-2 fw-bold">이메일</div>
         <input
           class="form-control"
           type="email"
-          placeholder="Enter your Email"
+          placeholder="이메일을 입력해주세요."
           v-model="userInfo.email"
         />
       </div>
       <div>
-        <div class="m-2 fw-bold">Password</div>
+        <div class="m-2 fw-bold">비밀번호</div>
         <input
           class="form-control"
           type="password"
-          placeholder="Enter your password"
+          placeholder="비밀번호를 입력해주세요."
           v-model="userInfo.password"
         />
       </div>
       <div>
-        <div class="m-2 fw-bold">Confirm Password</div>
+        <div class="m-2 fw-bold">비밀번호 확인</div>
         <input
           class="form-control"
           type="password"
-          placeholder="Enter your password"
+          placeholder="비밀번호를 입력해주세요."
           v-model="confirmPassword"
         />
       </div>
       <div class="text-danger mt-2 ms-1">
         {{ msg }}
       </div>
-      <button class="login-button mt-3 mb-3" type="submit">Sign Up</button>
-      <button class="sign-up-button" @click="cancel">Cancel</button>
+      <button class="login-button mt-3 mb-3 fw-bold" type="submit">가입</button>
+      <button class="sign-up-button fw-bold" @click="cancel">취소</button>
     </div>
   </form>
 </template>
@@ -118,6 +118,10 @@ button {
   border-radius: 20px;
   border: none;
   box-shadow: 0 2px 3px rgb(232, 232, 232);
+}
+button:hover {
+  color: #f3f3f3;
+  filter: brightness(1.05);
 }
 .login-button {
   background-color: #4fcca4;
