@@ -2,7 +2,7 @@
 <template>
   <div class="container">
     <button class="btn fw-bold logout-btn" @click="logout">로그아웃</button>
-    <img src="@/assets/logo.png" width="120px" />
+    <!-- <img src="@/assets/logo.png" width="120px" /> -->
     <h3 class="text-center fw-bold mt-1 mb-3 ms-3">{{ name }}님</h3>
     <div class="w-100 ps-2 fw-bold">개인정보 변경</div>
     <div v-if="!validatePwd" class="w-100">
