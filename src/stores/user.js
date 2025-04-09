@@ -63,6 +63,33 @@ export const useUserStore = defineStore('user', () => {
     });
     return filtered;
   };
+  const changeUserInfo = async (user, changeInfo) => {
+    try {
+      const newInfo = changeInfo;
+      console.log('newInfo', newInfo.name);
+      if (newInfo.password && newInfo.password.length > 0) {
+        await axios.put(MEMBERSURL + `/${user.id}`, {
+          ...user,
+          name: newInfo.name,
+          password: newInfo.password,
+        });
+      } else {
+        await axios.put(MEMBERSURL + `/${user.id}`, {
+          ...user,
+          name: newInfo.name,
+        });
+      }
+      // 업데이트된 사용자 정보 다시 가져오기
+      const updatedResponse = await axios.get(MEMBERSURL + `?id=${user.id}`);
+      state.userInfo = updatedResponse.data;
+
+      localStorage.setItem('userInfo', JSON.stringify(updatedResponse.data));
+      return true;
+    } catch (error) {
+      console.error('에러발생: ', error);
+      return false;
+    }
+  };
   const clearUser = () => {
     userInfo.value = [];
   };
@@ -73,6 +100,7 @@ export const useUserStore = defineStore('user', () => {
     addUserInfo,
     loadUserInfo,
     getMoneyList,
+    changeUserInfo,
     userInfo,
     clearUser,
   };

@@ -38,14 +38,8 @@
           placeholder="Enter your password"
           v-model="confirmPassword"
         />
-        <div
-          v-if="userInfo.password != confirmPassword && confirmPassword"
-          class="text-danger mt-2"
-        >
-          비밀번호가 일치하지 않습니다.
-        </div>
       </div>
-      <div class="text-danger mt-2">
+      <div class="text-danger mt-2 ms-1">
         {{ msg }}
       </div>
       <button class="login-button mt-3 mb-3" type="submit">Sign Up</button>
@@ -85,25 +79,24 @@ const validateForm = () => {
     return false;
   }
   if (userInfo.value.password != confirmPassword.value) {
-    msg.value = '비밀번호를 재확인해주세요.';
+    msg.value = '비밀번호가 일치하지 않습니다.';
     return false;
   }
   msg.value = '';
   return true;
 };
 const handleSubmit = async () => {
+  if (!validateForm()) return;
   const checkAccount = await userStore.checkAccount(userInfo.value.email);
   if (!checkAccount) {
+    console.log(checkAccount);
     msg.value = '이미 가입된 계정입니다.';
     return;
   }
-
-  if (validateForm()) {
-    const response = await userStore.addUserInfo(userInfo.value);
-    if (response) {
-      alert('회원가입 완료! 로그인을 해주세요.');
-      router.push('/login');
-    }
+  const response = await userStore.addUserInfo(userInfo.value);
+  if (response) {
+    alert('회원가입 완료! 로그인을 해주세요.');
+    router.push('/login');
   }
 };
 </script>

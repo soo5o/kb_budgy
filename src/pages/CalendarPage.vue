@@ -47,7 +47,6 @@ const calendarOptions = reactive({
   locale: koLocale,
   plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
   initialView: 'dayGridMonth',
-  selectable: true,
   async datesSet(info) {
     const userId = userStore.userInfo[0].id;
     const currentDate = new Date(info.view.currentStart); // 현재 보이는 시작 날짜
@@ -87,10 +86,33 @@ const calendarOptions = reactive({
   },
   dateClick(info) {
     selectedDate.value = info.dateStr; // 클릭한 날짜 저장
+    selectedDate.value = info.dateStr;
+
+    // 모든 날짜 셀 배경 초기화
+    document.querySelectorAll('.fc-daygrid-day').forEach((el) => {
+      el.style.backgroundColor = '';
+    });
+
+    // 선택한 날짜 셀 배경 변경
+    const selectedCell = document.querySelector(
+      `.fc-daygrid-day[data-date="${info.dateStr}"]`
+    );
+    if (selectedCell) {
+      selectedCell.style.backgroundColor = '#e8f9f5'; //원하는 색상
+    }
     scrollToList();
   },
   eventClick(info) {
     selectedDate.value = info.event.startStr;
+    document.querySelectorAll('.fc-daygrid-day').forEach((el) => {
+      el.style.backgroundColor = '';
+    });
+    const selectedCell = document.querySelector(
+      `.fc-daygrid-day[data-date="${info.dateStr}"]`
+    );
+    if (selectedCell) {
+      selectedCell.style.backgroundColor = '#e8f9f5';
+    }
     scrollToList();
   },
 });
