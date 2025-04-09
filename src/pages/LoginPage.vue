@@ -2,30 +2,34 @@
 <template>
   <form @submit.prevent="handleSubmit">
     <div class="container d-flex justify-content-center align-content-center">
-      <h1 class="fw-bolder text-center mb-5">Login</h1>
+      <h1 class="fw-bolder text-center mb-5">로그인</h1>
       <div>
-        <div class="m-2 fw-bold">Email</div>
+        <div class="m-2 fw-bold">이메일</div>
         <input
           class="form-control"
           type="email"
-          placeholder="Enter your Email"
+          placeholder="이메일을 입력하세요."
           v-model="userInfo.email"
         />
       </div>
       <div>
-        <div class="m-2 fw-bold">Password</div>
+        <div class="m-2 fw-bold">비밀번호</div>
         <input
           class="form-control"
           type="password"
-          placeholder="Enter your password"
+          placeholder="비밀번호를 입력하세요."
           v-model="userInfo.password"
         />
       </div>
       <div class="text-danger mt-2">
         {{ msg }}
       </div>
-      <button class="login-button mt-3 mb-3" type="submit">Login</button>
-      <button class="sign-up-button" @click="moveSignup">Sign Up</button>
+      <button class="login-button mt-3 mb-3 fw-bold" type="submit">
+        로그인
+      </button>
+      <button class="sign-up-button fw-bold" @click="moveSignup">
+        회원가입
+      </button>
     </div>
   </form>
 </template>
@@ -46,11 +50,11 @@ const moveSignup = () => {
 };
 const validateForm = () => {
   if (!userInfo.value.email) {
-    msg.value = '이메일을 입력해주세요';
+    msg.value = '이메일을 입력해주세요.';
     return false;
   }
   if (!userInfo.value.password) {
-    msg.value = '비밀번호를 입력해주세요';
+    msg.value = '비밀번호를 입력해주세요.';
     return false;
   }
   return true;
@@ -93,5 +97,9 @@ button {
 }
 .sign-up-button {
   background-color: rgb(174, 174, 174);
+}
+button:hover {
+  color: #f3f3f3;
+  filter: brightness(1.05);
 }
 </style>

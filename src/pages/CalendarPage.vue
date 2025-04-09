@@ -214,24 +214,13 @@ function scrollToList() {
 .calendar-header {
   width: 100%;
 }
-.summary {
-  margin-top: 1rem;
-  display: flex;
-  justify-content: space-between;
-}
-.summary-block {
-  width: 100px; /* 고정 너비 설정으로 위치 흔들림 방지 */
-  min-height: 60px; /* 높이도 어느 정도 고정되도록 */
-}
 ::v-deep .fc {
-  /* height: 100%; */
   width: 100%;
   min-height: 500px;
 }
 ::v-deep .fc-button {
   background-color: inherit;
   color: #46b894;
-  /* color: #a069ba; */
   border: none;
   border-radius: 6px;
   padding: 5px 10px;

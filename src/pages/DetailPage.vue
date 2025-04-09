@@ -8,33 +8,37 @@
       <nav class="navbar navbar-light mt-3">
         <form class="container-fluid justify-content-start">
           <button
+            :style="{
+              backgroundColor: filterType === 'daily' ? '#4fcca4' : 'white',
+              color: filterType === 'daily' ? 'white' : 'black',
+              borderColor: filterType === 'daily' ? '' : 'rgb(174, 174, 174)',
+            }"
             @click="filterType = 'daily'"
-            :class="[
-              'btn me-2',
-              filterType === 'daily' ? 'btn-success' : 'btn-outline-secondary',
-            ]"
+            class="btn me-2"
             type="button"
           >
             일일
           </button>
           <button
+            :style="{
+              backgroundColor: filterType === 'weekly' ? '#4fcca4' : 'white',
+              color: filterType === 'weekly' ? 'white' : 'black',
+              borderColor: filterType === 'weekly' ? '' : 'rgb(174, 174, 174)',
+            }"
             @click="filterType = 'weekly'"
-            :class="[
-              'btn me-2',
-              filterType === 'weekly' ? 'btn-success' : 'btn-outline-secondary',
-            ]"
+            class="btn me-2"
             type="button"
           >
             주간
           </button>
           <button
+            :style="{
+              backgroundColor: filterType === 'monthly' ? '#4fcca4' : 'white',
+              color: filterType === 'monthly' ? 'white' : 'black',
+              borderColor: filterType === 'monthly' ? '' : 'rgb(174, 174, 174)',
+            }"
             @click="filterType = 'monthly'"
-            :class="[
-              'btn me-2',
-              filterType === 'monthly'
-                ? 'btn-success'
-                : 'btn-outline-secondary',
-            ]"
+            class="btn me-2"
             type="button"
           >
             월간
@@ -57,7 +61,7 @@
               <small class="text-muted">{{ item.memo || '메모 없음' }}</small>
             </div>
             <span
-              :class="item.type === 'income' ? 'text-primary' : 'text-danger'"
+              :style="{ color: item.type === 'income' ? '#4fcca4' : 'black' }"
             >
               {{ item.type === 'income' ? '+' : '-'
               }}{{ Number(item.amount).toLocaleString() }}원
@@ -194,8 +198,8 @@ const categoryEmoji = (category) => {
 
 <style scoped>
 .detail-container {
-  width: 480px;
-  padding: 2rem;
+  width: 100%;
+  margin: 0 auto;
 }
 hr {
   color: gray;

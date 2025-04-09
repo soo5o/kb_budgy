@@ -1,17 +1,86 @@
 <!-- HomePage.vue -->
 <template>
-  <h1>홈 페이지</h1>
-  위에 헤더, 아래에 내비게이션 바 필요!
-  {{ info }}
-  {{ id }}
+  <div class="d-flex justify-content-center mb-3">
+    <div class="home-container">
+      <TotalAssetBox class="mt-3" :total="netAsset"></TotalAssetBox>
+      <RecentHistory :items="recentItems"></RecentHistory>
+      <div class="text-end mt-3">
+        <button class="btn btn-custom w-100" @click="goToDetail">더보기</button>
+      </div>
+    </div>
+  </div>
 </template>
 <script setup>
-import { onMounted } from 'vue';
-import { useUserStore } from '@/stores/user.js';
+import TotalAssetBox from '@/components/TotalAssetBox.vue';
+import RecentHistory from '@/components/RecentHistory.vue';
+import { useUserStore } from '@/stores/user';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
+import { onMounted, ref } from 'vue';
+import { computed } from 'vue';
 
+const moneyList = ref([]);
 const userStore = useUserStore();
-userStore.loadUserInfo(); // 페이지 로드 시 저장된 유저 정보 불러오기
+const router = useRouter();
 
-const info = userStore.userInfo;
-const id = info.length > 0 ? info[0].id : null; // 예시
+const fetchData = async () => {
+  const userId = computed(() => userStore.userInfo[0]?.id || 0);
+  console.log(userId.value);
+
+  if (!userId) {
+    alert('로그인이 필요합니다!');
+    router.push('/login');
+    return;
+  }
+
+  const { data } = await axios.get(
+    `http://localhost:3000/money?userId=${String(userId.value)}`
+  );
+
+  moneyList.value = data.sort(
+    (a, b) => new Date(b.consumptionDate) - new Date(a.consumptionDate)
+  );
+};
+
+onMounted(() => {
+  fetchData();
+});
+
+const recentItems = computed(() => moneyList.value.slice(0, 5));
+
+const netAsset = computed(() => {
+  const income = moneyList.value
+    .filter((i) => i.type === 'income')
+    .reduce((acc, cur) => acc + Number(cur.amount), 0);
+
+  const expense = moneyList.value
+    .filter((i) => i.type === 'expense')
+    .reduce((acc, cur) => acc + Number(cur.amount), 0);
+
+  return income - expense;
+});
+
+const goToDetail = () => {
+  router.push('/detail');
+};
 </script>
+
+<style scoped>
+.home-container {
+  width: 100%;
+  margin: 0 auto;
+}
+.btn-custom {
+  background-color: #f7fbf9;
+  color: #4fcca4;
+  border: 1px solid #4fcca4;
+  border-radius: 20px;
+  padding: 1rem;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+}
+.btn-custom:hover {
+  background-color: #4fcca4;
+  color: white;
+}
+</style>

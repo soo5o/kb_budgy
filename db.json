@@ -3,8 +3,8 @@
     {
       "id": "1",
       "email": "111@naver.com",
-      "password": "bbbbbbbb",
-      "name": "버기"
+      "password": "aaaaaaaa",
+      "name": "순대볶음"
     },
     {
       "id": "2",
@@ -174,15 +174,8 @@
   "goal": [
     {
       "id": "1",
-      "saved_date": [
-        "2025-04-01",
-        "2025-01-01",
-        "2025-01-08"
-      ],
-      "goal_amount": {
-        "amount": "3000",
-        "start_date": "2025-04-09"
-      }
+      "goal_amount": null,
+      "saved_date": ["2025-01-01", "2025-04-01", "2025-01-08"]
     },
     {
       "id": "2",
