@@ -1,16 +1,26 @@
 <template>
   <header class="header" v-if="!isHiddenPage">
-    <img src="@/assets/logoHeader.png" alt="로고" class="logo" />
+    <img
+      @click="goToHome"
+      src="@/assets/logoHeader.png"
+      alt="로고"
+      class="logo"
+    />
     <!-- 필요시 메뉴나 버튼 추가 -->
   </header>
 </template>
 <script setup>
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { computed } from 'vue';
 
 const route = useRoute();
+const router = useRouter();
 const hiddenPaths = ['/', '/login', '/signup'];
 const isHiddenPage = computed(() => hiddenPaths.includes(route.path));
+
+const goToHome = () => {
+  router.push('/home');
+};
 </script>
 <style scoped>
 .header {
@@ -29,5 +39,6 @@ const isHiddenPage = computed(() => hiddenPaths.includes(route.path));
 
 .logo {
   height: 38px;
+  cursor: pointer;
 }
 </style>
