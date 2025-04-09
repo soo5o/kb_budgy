@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import MissionPage from '@/pages/MissionPage.vue';
 import SplashPage from '@/pages/SplashPage.vue';
 import LoginPage from '@/pages/LoginPage.vue';
 import SignUpPage from '@/pages/SignUpPage.vue';
@@ -15,6 +16,11 @@ const router = createRouter({
     {
       path: '/',
       component: SplashPage,
+    },
+    {
+      path: '/mission',
+      name: 'mission',
+      component: MissionPage,
     },
     {
       path: '/login',
