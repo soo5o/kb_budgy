@@ -44,7 +44,7 @@
 
     <!-- v-if 사용해서 해당 userId를 id값으로 
    하는 goal 데이터 없으면 목표 추가버튼 -->
-    <div class="noGoal" v-else-if="userGoal">
+    <div class="noGoal" v-else-if="!userGoal || userGoal.goal_amount == null">
       <div id="viewGoal" class="card">
         <h4>{{ info[0].name }}님</h4>
         <h3>목표를 추가해주세요</h3>
@@ -225,23 +225,7 @@ async function deleteGoal(userId) {
     console.log('deleteGoal error: ', err);
   }
 }
-async function modifyGoal(userId, amount) {
-  try {
-    const data = {
-      id: userId,
-      goal_amount: amount,
-      saved_date: mergedDates.value,
-    };
-    const response = await axios.put(
-      `http://localhost:3000/goal/${userId}`,
-      data
-    );
-    console.log('modifyGoal response: ', response);
-    userGoal.value = data; //화면에 반영하기 위해 userGoal 수정
-  } catch (err) {
-    console.log('modifyGoal error: ', err);
-  }
-}
+
 async function addGoal() {
   try {
     showModal.value = false;
