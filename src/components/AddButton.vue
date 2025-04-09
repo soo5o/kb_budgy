@@ -25,6 +25,7 @@ const goToAddPage = () => {
   font-size: 20px;
   position: fixed;
   bottom: 12%;
-  right: 5%;
+  right: 3%;
+  z-index: 1000;
 }
 </style>

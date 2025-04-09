@@ -178,6 +178,33 @@
       "consumptionDate": "2025-04-09",
       "memo": "주식 투자 굳",
       "type": "income"
+    },
+    {
+      "id": "38f1",
+      "userId": "1",
+      "amount": 1000,
+      "category": "식비",
+      "consumptionDate": "2025-04-09",
+      "memo": "붕어빵",
+      "type": "expense"
+    },
+    {
+      "id": "75c0",
+      "userId": "1",
+      "amount": 3000,
+      "category": "건강",
+      "consumptionDate": "2025-04-09",
+      "memo": "보험료 반환",
+      "type": "income"
+    },
+    {
+      "id": "2430",
+      "userId": "1",
+      "amount": 10,
+      "category": "식비",
+      "consumptionDate": "2025-04-10",
+      "memo": "",
+      "type": "income"
     }
   ],
   "goal": [
