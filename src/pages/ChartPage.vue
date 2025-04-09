@@ -1,7 +1,7 @@
 <template>
   <div class="p-3">
     <div class="flex items-center mb-4">
-      <label class="mr-2 font-medium">월 선택:</label>
+      <label class="mr-2 font-medium">월 선택 : </label>&nbsp;
       <select v-model="selectedMonth" class="border rounded px-2 py-1 text-sm">
         <option v-for="month in months" :key="month" :value="month">
           {{ month }}
@@ -46,8 +46,8 @@
       </button>
     </div>
 
-    <!-- 차트 부분 -->
-    <div class="relative w-full" style="height: 240px">
+    <!-- 차트 영역 -->
+    <div class="chart-container relative w-full max-w-md mx-auto" style="height: 240px">
       <canvas ref="chartCanvas" class="absolute top-0 left-0 w-full h-full"></canvas>
     </div>
 
@@ -78,9 +78,7 @@
               ></span>
               <span class="text-sm text-dark">{{ category }}</span>
             </div>
-            <span class="badge bg-primary rounded-pill text-sm ms-3">
-              {{ categoryMap[category].toLocaleString() }}원
-            </span>
+            <span class="rounded-pill text-sm ms-3"> {{ categoryMap[category].toLocaleString() }}원 </span>
           </li>
         </template>
 
@@ -105,7 +103,7 @@
                 ></span>
                 <span class="text-muted small">{{ item.category }} · {{ item.date }}</span>
               </div>
-              <span class="badge bg-primary rounded-pill"> {{ item.amount.toLocaleString() }}원 </span>
+              <span class="rounded-pill"> {{ item.amount.toLocaleString() }}원 </span>
             </div>
 
             <!-- 툴팁 -->
@@ -131,6 +129,8 @@ import { useUserStore } from '@/stores/user';
 Chart.register(...registerables);
 
 const chartCanvas = ref(null);
+let chartInstance = null;
+const activeIndex = ref(null); // 클릭된 항목 인덱스 저장
 
 const categoryMap = ref({});
 const filteredCategories = ref([]);
@@ -146,8 +146,6 @@ const tooltipIndex = ref(null);
 const toggleTooltip = (index) => {
   tooltipIndex.value = tooltipIndex.value === index ? null : index;
 };
-
-let chartInstance = null;
 
 const selectedMonth = ref('전체');
 const totalAmount = ref(0);
@@ -171,16 +169,16 @@ const months = ref([
 const categories = ['식비', '주거', '교통', '취미', '쇼핑', '건강', '가족', '교육', '금융', '기타'];
 
 const backgroundColorMap = {
-  식비: '#4f46e5',
-  주거: '#06b6d4',
-  교통: '#facc15',
-  취미: '#f472b6',
-  쇼핑: '#a78bfa',
-  건강: '#34d399',
-  가족: '#fb923c',
-  교육: '#f43f5e',
-  금융: '#22c55e',
-  기타: '#0ea5e9',
+  식비: '#4f46e5', // 인디고
+  주거: '#06b6d4', // 시안
+  교통: '#facc15', // 밝은 노랑
+  취미: '#f472b6', // 연한 핑크
+  쇼핑: '#a78bfa', // 연보라
+  건강: '#34d399', // 청록
+  가족: '#fb923c', // 오렌지
+  교육: '#f43f5e', // 강렬한 핑크
+  금융: '#22c55e', // 초록
+  기타: '#0ea5e9', // 하늘
 };
 
 const renderChart = async () => {
@@ -233,9 +231,19 @@ const renderChart = async () => {
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
   filteredCategories.value = categories.filter((category) => categoryMap.value[category] > 0);
-  const labels = filteredCategories.value;
-  const values = labels.map((category) => categoryMap.value[category]);
-  const backgroundColors = labels.map((c) => backgroundColorMap[c]);
+  let labels = filteredCategories.value;
+  let values = labels.map((category) => categoryMap.value[category]);
+  let backgroundColors = labels.map((c) => backgroundColorMap[c]);
+
+  // 데이터 없으면 '회식' 차트 표시
+  if (values.length === 0) {
+    labels = [''];
+    values = [1];
+    backgroundColors = ['#D1D5DB']; // 회색 느낌
+  }
+
+  // 🔥 클릭한 항목만 hoverOffset을 크게
+  const hoverOffsets = values.map((_, idx) => (idx === activeIndex.value ? 50 : 10));
 
   if (chartInstance) chartInstance.destroy();
 
@@ -247,6 +255,7 @@ const renderChart = async () => {
         {
           data: values,
           backgroundColor: backgroundColors,
+          hoverOffset: hoverOffsets, // ✨ 포인트: 여기에서 조각별 hover 크기 조정
         },
       ],
     },
@@ -260,6 +269,14 @@ const renderChart = async () => {
         },
       },
     },
+    // 👇 클릭 이벤트 핸들러 추가
+    onClick: (event, elements) => {
+      if (elements.length > 0) {
+        const index = elements[0].index;
+        activeIndex.value = index === activeIndex.value ? null : index; // 토글
+        renderChart(); // 다시 렌더링
+      }
+    },
   });
 };
 
@@ -272,5 +289,15 @@ canvas {
   display: block;
   width: 100% !important;
   height: 100% !important;
+}
+.chart-container {
+  height: 240px;
+  position: relative;
+  padding: 16px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  margin: 16px auto;
+  transition: transform 0.2s ease;
 }
 </style>
