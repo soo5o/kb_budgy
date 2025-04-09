@@ -35,22 +35,39 @@ const goal_amount = ref('');
 const resetForm = () => {
   goal_amount.value = '';
 };
-
+const today = new Date().toISOString().split('T')[0];
 const submitGoal = async () => {
   //금액 양수로만 받는 거 검사추가하기
   try {
-    const today = new Date().toISOString().split('T')[0];
+    console.log('props.userId: ', props.userId);
+    const data = await axios.get(`http://localhost:3000/goal/${props.userId}`);
+    console.log('기존 data: ', data);
+
+    //기존 goal 있으면 put으로 수정
     await axios.put(`http://localhost:3000/goal/${props.userId}`, {
       id: props.userId,
       saved_date: props.mergedDates,
       goal_amount: { amount: goal_amount.value, start_date: today },
     });
+
     console.log('props.mergeDates: ', props.mergedDates);
     emit('goal-added'); //부모에게 목표 추가 알림
     resetForm();
   } catch (err) {
+    if (err.response && err.response.status === 404) {
+      //기존 goal 없으면 post로 추가
+      await axios.post(`http://localhost:3000/goal`, {
+        id: props.userId,
+        saved_date: props.mergedDates,
+        goal_amount: { amount: goal_amount.value, start_date: today },
+      });
+      emit('goal-added'); //부모에게 목표 추가 알림
+    } else {
+      console.error('에러: ', err);
+      alert('등록에 실패했어요');
+    }
+
     resetForm();
-    alert('등록에 실패했어요');
   }
 };
 </script>
