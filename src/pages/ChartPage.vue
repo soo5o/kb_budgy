@@ -125,7 +125,7 @@
                   >{{ item.category }} · {{ item.date }}</span
                 >
               </div>
-              <span class="rounded-pill">
+              <span class="rounded-pill text-sm ms-3 fw-bold">
                 {{ item.amount.toLocaleString() }}원
               </span>
             </div>
