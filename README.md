@@ -31,6 +31,10 @@ https://github.com/user-attachments/assets/5803d205-c349-411c-8d0b-f55c83a13679
 
 https://github.com/user-attachments/assets/111f9996-cd66-44d7-9335-378bfb15b2e3
 <hr>
+<strong>카테고리 별 차트 페이지</strong>
+
+https://github.com/user-attachments/assets/111f9996-cd66-44d7-9335-378bfb15b2e3
+<hr>
 
 ## 💡Teck Stack
 | 분야    | 사용기술  |
