@@ -184,6 +184,15 @@
       "consumptionDate": "2025-04-09",
       "memo": "보험료 반환",
       "type": "income"
+    },
+    {
+      "id": "3a54",
+      "amount": 1000,
+      "category": "식비",
+      "consumptionDate": "2025-04-09",
+      "memo": "주식 수수료",
+      "type": "expense",
+      "userId": "1"
     }
   ],
   "goal": [
@@ -195,7 +204,7 @@
         "2025-01-08"
       ],
       "goal_amount": {
-        "amount": 50000,
+        "amount": 5000,
         "start_date": "2025-04-10"
       }
     },
