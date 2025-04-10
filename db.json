@@ -230,8 +230,11 @@
     },
     {
       "id": "5",
-      "goal_amount": null,
-      "saved_date": []
+      "saved_date": [],
+      "goal_amount": {
+        "amount": 50000,
+        "start_date": "2025-04-10"
+      }
     }
   ]
 }

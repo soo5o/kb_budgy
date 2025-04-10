@@ -5,12 +5,19 @@
       <h2 v-else-if="mode === 'modify'">목표 금액 수정</h2>
       <form @submit.prevent="submitGoal">
         <input
+          type="number"
           v-model="goal_amount"
-          placeholder="목표 금액 (ex: 50000)"
+          placeholder="목표 금액(ex: 50000)"
           required
         />
+        <p v-if="Number(goal_amount) < 0" class="text-danger">
+          0원 이상 입력해주세요
+        </p>
         <div class="btns">
-          <button type="submit">완료</button>
+          <button type="submit" v-if="Number(goal_amount) < 0" disabled>
+            완료
+          </button>
+          <button type="submit" v-if="Number(goal_amount) >= 0">완료</button>
           <button type="button" @click="$emit('close')">닫기</button>
         </div>
       </form>
