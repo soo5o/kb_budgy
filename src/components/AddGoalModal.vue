@@ -3,22 +3,42 @@
     <div class="custom_modal">
       <h2 v-if="mode === 'add'">목표 금액 설정</h2>
       <h2 v-else-if="mode === 'modify'">목표 금액 수정</h2>
+      <br />
       <form @submit.prevent="submitGoal">
         <input
+          class="numberInput"
           type="number"
           v-model="goal_amount"
           placeholder="목표 금액(ex: 50000)"
           required
-        />
-        <p v-if="Number(goal_amount) < 0" class="text-danger">
+        /><br />
+        <p v-if="Number(goal_amount) < 0" class="text-danger font-weight-bold">
           0원 이상 입력해주세요
         </p>
+        <br />
         <div class="btns">
-          <button type="submit" v-if="Number(goal_amount) < 0" disabled>
+          <button
+            class="btn btn-secondary abledButton"
+            type="button"
+            @click="$emit('close')"
+          >
+            닫기
+          </button>
+          <button
+            type="submit"
+            v-if="Number(goal_amount) < 0"
+            disabled
+            class="disabledButton"
+          >
             완료
           </button>
-          <button type="submit" v-if="Number(goal_amount) >= 0">완료</button>
-          <button type="button" @click="$emit('close')">닫기</button>
+          <button
+            type="submit"
+            class="okayButtonColor abledButton"
+            v-if="Number(goal_amount) >= 0"
+          >
+            완료
+          </button>
         </div>
       </form>
     </div>
@@ -98,6 +118,8 @@ const submitGoal = async () => {
   border-radius: 1rem;
   width: 400px;
   max-width: 90%;
+  height: 300px;
+  overflow-y: auto;
 }
 input {
   width: 100%;
@@ -105,16 +127,31 @@ input {
   padding: 0.5rem;
   font-size: 1rem;
 }
-textarea {
-  resize: vertical;
-}
 .btns {
   display: flex;
   justify-content: space-between;
 }
-button {
+.abledButton {
   padding: 8px 16px;
   font-weight: bold;
   cursor: pointer;
+  border-radius: 0.4rem;
+  border-style: none;
+}
+.okayButtonColor {
+  background-color: #4fcca4;
+  color: #ffffff;
+}
+.disabledButton {
+  padding: 8px 16px;
+  font-weight: bold;
+  border-radius: 0.4rem;
+  border-style: none;
+}
+h2 {
+  font-weight: bold;
+}
+.numberInput {
+  border-radius: 1rem;
 }
 </style>
