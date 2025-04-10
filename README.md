@@ -1,7 +1,7 @@
 <p align="center">
   <img src="https://github.com/user-attachments/assets/689c9bd5-a17b-4fd3-b6f1-7d49e969c631" width="400" />
 </p>
-<h1 align="center">🐦 buggy - 당신의 똑똑한 가계부 파트너</h1> <p align="center"> 소비 습관을 파악하고, 목표 지출을 지키며,<br> 더 나은 재정 관리를 위한 여정에 함께하세요!<br><br> <strong>"Track, Manage, and Achieve"</strong><br> </p> <br>
+<h1 align="center">🐦 Budgy - 당신의 똑똑한 가계부 파트너</h1> <p align="center"> 소비 습관을 파악하고, 목표 지출을 지키며,<br> 더 나은 재정 관리를 위한 여정에 함께하세요!<br><br> <strong>"Track, Manage, and Achieve"</strong><br> </p> <br>
 
 - [Teck Stack](#Teck-Stack)
 - [ERD](#ERD)
@@ -20,7 +20,8 @@
 ![image](https://github.com/user-attachments/assets/d5d73d95-0cc4-4bf0-8184-1f4e4d54770d)
 
 ## 📁Project Structure
-![image](https://github.com/user-attachments/assets/5f738ccb-02dc-4ddf-a61e-d81bf11416b4)
+![image](https://github.com/user-attachments/assets/fc3da62a-5150-4949-8fb0-6185327323b7)
+
 
 ## 💰Main Feature
 - <strong>가계부 CRUD</strong>
@@ -48,7 +49,7 @@
 | Name    |                   <center>정수경</center>                   |                    <center>최명진</center>                    |                   <center>안수연</center>                   |                 <center>김예림</center>                 | 
 | :------ | :---------------------------------------------------------: | :-----------------------------------------------------------: | :---------------------------------------------------------: | :-----------------------------------------------------: |
 | Profile | <img src="https://github.com/user-attachments/assets/81a7b686-9e99-4d07-a6ca-c87584abf45c" width="100" height="100">|<img src="https://github.com/user-attachments/assets/077f2a85-6749-44e5-84c9-361f0d82cf0c" width="100" height="100"> |<img src="https://github.com/user-attachments/assets/e34be024-5f73-41f8-b6fc-8b8a57b10828"  width="100" height="100"> | <img src="https://github.com/user-attachments/assets/85824907-475d-4166-b523-8ac2ce2919ff" width="100" height="100">
-| role    |                 <center>Team Leader<br> Frontend</center>                  |                  <center> Frontend </center>                  |                 <center> Frontend </center>                 |               <center> Backend </center>               |                   <center> Backend </center>                    |
+| role    |                 <center>Team Leader<br> Frontend</center>                  |                  <center> Frontend </center>                  |                 <center> Frontend </center>                 |               <center> Frontend </center>               |                   <center> Frontend </center>                    |
 | GitHub  | <center>[@soo5o](https://github.com/soo5o)</center> | &nbsp;&nbsp;<center>[@cmgjn1881](https://github.com/cmgjn1881)</center>&nbsp;&nbsp; | &nbsp;&nbsp;<center>[@suyeonan](https://github.com/suyeonan)</center>&nbsp;&nbsp; | &nbsp;&nbsp;<center>[@yellowmodric](https://github.com/yellowmodric)</center>&nbsp;&nbsp; | 
 
 

@@ -10,20 +10,32 @@
     </div>
 
     <!-- 수입/지출 표시 -->
-    <div class="mb-2 font-medium text-right">
+    <div class="mb-2 font-medium text-right fw-bold">
       <template v-if="selectedMonth === '전체'">
         {{ chartType === 'expense' ? '총 지출:' : '총 수입:' }}
-        <span class="text-indigo-600">{{ totalAmount.toLocaleString() }}원</span>
+        <span class="text-indigo-600"
+          >{{ totalAmount.toLocaleString() }}원</span
+        >
       </template>
       <template v-else>
         {{ chartType === 'expense' ? '지출' : '수입' }}
         <span class="text-sm text-gray-500 ml-1">({{ selectedMonth }}) : </span>
-        <span class="text-indigo-600">{{ totalAmount.toLocaleString() }}원</span>
+        <span class="text-indigo-600"
+          >{{ totalAmount.toLocaleString() }}원</span
+        >
       </template>
     </div>
 
     <!-- 버튼 부분 -->
-    <div class="button-group" style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-bottom: 1rem">
+    <div
+      class="button-group"
+      style="
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      "
+    >
       <button
         @click="chartType = 'expense'"
         :style="
@@ -47,8 +59,14 @@
     </div>
 
     <!-- 차트 영역 -->
-    <div class="chart-container relative w-full max-w-md mx-auto" style="height: 240px">
-      <canvas ref="chartCanvas" class="absolute top-0 left-0 w-full h-full"></canvas>
+    <div
+      class="chart-container relative w-full max-w-md mx-auto"
+      style="height: 240px"
+    >
+      <canvas
+        ref="chartCanvas"
+        class="absolute top-0 left-0 w-full h-full"
+      ></canvas>
     </div>
 
     <!-- 필터링 -->
@@ -66,7 +84,7 @@
             :key="category"
             class="list-group-item d-flex justify-content-between align-items-center"
           >
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center p-1">
               <span
                 class="rounded-circle me-2"
                 :style="{
@@ -78,7 +96,9 @@
               ></span>
               <span class="text-sm text-dark">{{ category }}</span>
             </div>
-            <span class="rounded-pill text-sm ms-3"> {{ categoryMap[category].toLocaleString() }}원 </span>
+            <span class="rounded-pill text-sm ms-3 fw-bold">
+              {{ categoryMap[category].toLocaleString() }}원
+            </span>
           </li>
         </template>
 
@@ -101,9 +121,13 @@
                     display: 'inline-block',
                   }"
                 ></span>
-                <span class="text-muted small">{{ item.category }} · {{ item.date }}</span>
+                <span class="text-muted small"
+                  >{{ item.category }} · {{ item.date }}</span
+                >
               </div>
-              <span class="rounded-pill"> {{ item.amount.toLocaleString() }}원 </span>
+              <span class="rounded-pill">
+                {{ item.amount.toLocaleString() }}원
+              </span>
             </div>
 
             <!-- 툴팁 -->
@@ -166,7 +190,18 @@ const months = ref([
   '2025-12',
 ]);
 
-const categories = ['식비', '주거', '교통', '취미', '쇼핑', '건강', '가족', '교육', '금융', '기타'];
+const categories = [
+  '식비',
+  '주거',
+  '교통',
+  '취미',
+  '쇼핑',
+  '건강',
+  '가족',
+  '교육',
+  '금융',
+  '기타',
+];
 
 const backgroundColorMap = {
   식비: '#4f46e5', // 인디고
@@ -195,7 +230,9 @@ const renderChart = async () => {
   const allData = res.data;
 
   const targetData = allData.filter((item) => {
-    const matchMonth = selectedMonth.value === '전체' || item.consumptionDate.startsWith(selectedMonth.value);
+    const matchMonth =
+      selectedMonth.value === '전체' ||
+      item.consumptionDate.startsWith(selectedMonth.value);
     const matchType = chartType.value ? item.type === chartType.value : true;
     return matchMonth && matchType;
   });
@@ -208,7 +245,9 @@ const renderChart = async () => {
   targetData.forEach((item) => {
     const amount = parseInt(item.amount);
     if (!isNaN(amount)) {
-      const category = map.hasOwnProperty(item.category) ? item.category : '기타';
+      const category = map.hasOwnProperty(item.category)
+        ? item.category
+        : '기타';
       map[category] += amount;
     }
   });
@@ -230,7 +269,9 @@ const renderChart = async () => {
     }))
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  filteredCategories.value = categories.filter((category) => categoryMap.value[category] > 0);
+  filteredCategories.value = categories.filter(
+    (category) => categoryMap.value[category] > 0
+  );
   let labels = filteredCategories.value;
   let values = labels.map((category) => categoryMap.value[category]);
   let backgroundColors = labels.map((c) => backgroundColorMap[c]);
@@ -243,7 +284,9 @@ const renderChart = async () => {
   }
 
   // 🔥 클릭한 항목만 hoverOffset을 크게
-  const hoverOffsets = values.map((_, idx) => (idx === activeIndex.value ? 50 : 10));
+  const hoverOffsets = values.map((_, idx) =>
+    idx === activeIndex.value ? 50 : 10
+  );
 
   if (chartInstance) chartInstance.destroy();
 
