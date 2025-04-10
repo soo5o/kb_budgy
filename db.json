@@ -59,6 +59,12 @@
       "email": "101010@naver.com",
       "name": "101010",
       "password": "1010101010"
+    },
+    {
+      "id": "62c1",
+      "name": "수경",
+      "email": "jung@naver.com",
+      "password": "aaaaaaaa"
     }
   ],
   "money": [
@@ -210,7 +216,11 @@
   "goal": [
     {
       "id": "1",
-      "saved_date": ["2025-01-01", "2025-04-01", "2025-01-08"],
+      "saved_date": [
+        "2025-01-01",
+        "2025-04-01",
+        "2025-01-08"
+      ],
       "goal_amount": {
         "amount": "50000",
         "start_date": "2025-04-09"
