@@ -20,7 +20,7 @@
           <button
             class="btn btn-secondary abledButton"
             type="button"
-            @click="$emit('close')"
+            @click="handleClose"
           >
             닫기
           </button>
@@ -96,6 +96,10 @@ const submitGoal = async () => {
 
     resetForm();
   }
+};
+const handleClose = () => {
+  resetForm(); //입력한 form 초기화
+  emit('close'); //부모에게 닫기 알림
 };
 </script>
 
