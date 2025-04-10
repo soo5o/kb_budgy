@@ -3,11 +3,47 @@
 </p>
 <h1 align="center">🐦 Budgy - 당신의 똑똑한 가계부 파트너</h1> <p align="center"> 소비 습관을 파악하고, 목표 지출을 지키며,<br> 더 나은 재정 관리를 위한 여정에 함께하세요!<br><br> <strong>"Track, Manage, and Achieve"</strong><br> </p> <br>
 
+- [Demo](#Demo)
 - [Teck Stack](#Teck-Stack)
 - [ERD](#ERD)
 - [Team Member](#Team-Member)
 - [Project Structure](#Project-Structure)
 - [Main Feature](#Main-Feature)
+
+## 📺Demo
+<strong>스플래쉬 화면(1초간 등장 후 로그인 화면으로 이동)</strong>
+
+https://github.com/user-attachments/assets/2c3645b7-1134-42c5-af0f-5125890de089
+<hr>
+<strong>로그인 페이지</strong>
+
+https://github.com/user-attachments/assets/3148ac6e-8595-450f-ab50-d72966af5dc4
+<hr>
+<strong>홈 페이지, 거래 내역 조회 페이지</strong>
+
+https://github.com/user-attachments/assets/4ca67901-5973-4dec-83db-9e1ca099faed
+<hr>
+<strong>거래 내역 추가 페이지</strong>
+
+https://github.com/user-attachments/assets/5803d205-c349-411c-8d0b-f55c83a13679
+<hr>
+<strong>거래 내역 수정 페이지</strong>
+
+https://github.com/user-attachments/assets/111f9996-cd66-44d7-9335-378bfb15b2e3
+<hr>
+<strong>카테고리 별 차트 페이지</strong>
+
+https://github.com/user-attachments/assets/86e609ab-1d1e-41e2-b7af-a565ab777607
+<hr>
+<strong>달력 페이지</strong>
+
+https://github.com/user-attachments/assets/9bea4e6c-350d-4e4d-92c4-0df93bbca348
+<hr>
+<strong>회원 정보 페이지</strong>
+
+https://github.com/user-attachments/assets/1f5d847f-5ea4-45b3-8c18-d28feb54e762
+
+<hr>
 
 ## 💡Teck Stack
 | 분야    | 사용기술  |
