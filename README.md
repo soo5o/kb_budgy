@@ -33,10 +33,11 @@ https://github.com/user-attachments/assets/111f9996-cd66-44d7-9335-378bfb15b2e3
 <hr>
 <strong>카테고리 별 차트 페이지</strong>
 
+https://github.com/user-attachments/assets/86e609ab-1d1e-41e2-b7af-a565ab777607
+<hr>
+<strong>달력 페이지</strong>
 
 https://github.com/user-attachments/assets/86e609ab-1d1e-41e2-b7af-a565ab777607
-
-
 <hr>
 
 ## 💡Teck Stack
