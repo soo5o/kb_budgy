@@ -6,10 +6,10 @@
       <br />
       <form @submit.prevent="submitGoal">
         <input
-          class="numberInput"
+          class="form-control"
           type="number"
           v-model="goal_amount"
-          placeholder="목표 금액(ex: 50000)"
+          placeholder="목표 금액 (ex: 50,000)"
           required
         /><br />
         <p v-if="Number(goal_amount) < 0" class="text-danger font-weight-bold">
@@ -17,13 +17,6 @@
         </p>
         <br />
         <div class="btns">
-          <button
-            class="btn btn-secondary abledButton"
-            type="button"
-            @click="handleClose"
-          >
-            닫기
-          </button>
           <button
             type="submit"
             v-if="Number(goal_amount) < 0"
@@ -38,6 +31,14 @@
             v-if="Number(goal_amount) >= 0"
           >
             완료
+          </button>
+          <button
+            class="btn abledButton"
+            type="button"
+            @click="handleClose"
+            style="background-color: rgb(174, 174, 174); color: white"
+          >
+            닫기
           </button>
         </div>
       </form>
@@ -154,8 +155,5 @@ input {
 }
 h2 {
   font-weight: bold;
-}
-.numberInput {
-  border-radius: 1rem;
 }
 </style>
