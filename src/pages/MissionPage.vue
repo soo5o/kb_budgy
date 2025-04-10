@@ -1,25 +1,28 @@
 <template>
   <!-- 로딩 완료 후-->
-  <div class="allWrap" v-if="!isLoading">
+  <div class="container" v-if="!isLoading">
     <br />
     <div class="hasGoal" v-if="userGoal && userGoal.goal_amount != null">
       <div id="viewGoal" class="card">
-        <h4>{{ info[0].name }}님의 목표 금액</h4>
-        <h1>{{ parseInt(userGoal.goal_amount.amount).toLocaleString() }} 원</h1>
+        <h4 class="text-center">{{ info[0].name }}님의 목표 금액</h4>
+        <h3 class="fw-bold text-center">
+          {{ parseInt(userGoal.goal_amount.amount).toLocaleString() }}원
+        </h3>
       </div>
       <br />
       <div class="d-flex justify-content-around">
         <input
           type="button"
-          class="btn btn-secondary"
-          value="목표 삭제"
-          @click="deleteGoal(info[0].id)"
-        />
-        <input
-          type="button"
           class="btn btn-color"
           value="목표 수정"
           @click="showModal = true"
+        />
+        <input
+          type="button"
+          class="btn"
+          value="목표 삭제"
+          @click="deleteGoal(info[0].id)"
+          style="background-color: rgb(174, 174, 174); color: white"
         />
         <AddGoalModal
           :visible="showModal"
@@ -29,15 +32,14 @@
           @goal-added="addGoal"
           @close="showModal = false"
         />
-
         <!-- 해당 userId를 id값으로 하는 goal 데이터 있으면 수정,삭제버튼 -->
       </div>
       <br />
-      <div id="viewContinuous" class="card">
-        <h3 class="card-title">
-          <i class="fa-solid fa-thumbs-up" style="color: #4fcca4"></i> 이번 달,
-          성공한 날 {{ successLength }}일!
-        </h3>
+      <div id="viewContinuous" class="card p-3">
+        <h4 class="card-title text-center">
+          <i class="fa-solid fa-thumbs-up" style="color: #4fcca4"></i>
+          이번 달, 성공한 날 {{ successLength }}일!
+        </h4>
       </div>
       <br />
     </div>
@@ -46,8 +48,8 @@
    하는 goal 데이터 없으면 목표 추가버튼 -->
     <div class="noGoal" v-else-if="!userGoal || userGoal.goal_amount == null">
       <div id="viewGoal" class="card">
-        <h4>{{ info[0].name }}님</h4>
-        <h3>목표를 추가해주세요</h3>
+        <h4 class="text-center">{{ info[0].name }}님</h4>
+        <h3 class="text-center">목표를 추가해주세요</h3>
       </div>
       <br />
       <div class="d-flex justify-content-around">
@@ -69,7 +71,7 @@
     </div>
     <br />
 
-    <div id="viewCalendar">
+    <div id="viewCalendar" class="d-flex justify-content-center">
       <v-date-picker v-model="selectedDate" is-inline :attributes="attrs">
       </v-date-picker>
     </div>
@@ -239,13 +241,13 @@ async function addGoal() {
 
 <style scoped>
 .allWrap {
+  width: 100%;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-
 #viewGoal h3,
 #viewGoal h4 {
   text-align: left;
