@@ -202,25 +202,12 @@
       "consumptionDate": "2025-04-09",
       "memo": "보험료 반환",
       "type": "income"
-    },
-    {
-      "id": "2430",
-      "userId": "1",
-      "amount": 10,
-      "category": "식비",
-      "consumptionDate": "2025-04-10",
-      "memo": "",
-      "type": "income"
     }
   ],
   "goal": [
     {
       "id": "1",
-      "saved_date": [
-        "2025-01-01",
-        "2025-04-01",
-        "2025-01-08"
-      ],
+      "saved_date": ["2025-01-01", "2025-04-01", "2025-01-08"],
       "goal_amount": {
         "amount": "50000",
         "start_date": "2025-04-09"
@@ -236,8 +223,11 @@
     },
     {
       "id": "5",
-      "goal_amount": null,
-      "saved_date": []
+      "saved_date": [],
+      "goal_amount": {
+        "amount": 50000,
+        "start_date": "2025-04-10"
+      }
     }
   ]
 }
