@@ -1,3 +1,4 @@
+// index.js
 import { createRouter, createWebHistory } from 'vue-router';
 import MissionPage from '@/pages/MissionPage.vue';
 import SplashPage from '@/pages/SplashPage.vue';
@@ -5,6 +6,7 @@ import LoginPage from '@/pages/LoginPage.vue';
 import SignUpPage from '@/pages/SignUpPage.vue';
 import HomePage from '@/pages/HomePage.vue';
 import AddPage from '@/pages/AddPage.vue';
+import EditPage from '@/pages/EditPage.vue';
 import DetailPage from '@/pages/DetailPage.vue';
 import ChartPage from '@/pages/ChartPage.vue';
 import CalendarPage from '@/pages/CalendarPage.vue';
@@ -41,6 +43,11 @@ const router = createRouter({
       path: '/add',
       name: 'add',
       component: AddPage,
+    },
+    {
+      path: '/edit/:id',
+      name: 'EditPage',
+      component: EditPage,
     },
     {
       path: '/detail',
