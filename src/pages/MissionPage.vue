@@ -32,7 +32,6 @@
           @goal-added="addGoal"
           @close="showModal = false"
         />
-        <!-- 해당 userId를 id값으로 하는 goal 데이터 있으면 수정,삭제버튼 -->
       </div>
       <br />
       <div id="viewContinuous" class="card p-3">
@@ -67,6 +66,17 @@
           @goal-added="addGoal"
           @close="showModal = false"
         />
+      </div>
+      <br />
+      <div
+        id="viewContinuous"
+        class="card p-3"
+        v-if="userGoal.goal_amount == null && userGoal.saved_date != null"
+      >
+        <h4 class="card-title text-center">
+          <i class="fa-solid fa-thumbs-up" style="color: #4fcca4"></i>
+          이번 달, 성공한 날 {{ savedDateLength }}일!
+        </h4>
       </div>
     </div>
     <br />
@@ -237,6 +247,12 @@ async function addGoal() {
     console.log('addGoal error: ', err);
   }
 }
+const savedDateLength = computed(() => {
+  const thisMonth = new Date().getMonth();
+  return savedDate.value.filter(
+    (date) => new Date(date).getMonth() === thisMonth
+  ).length;
+});
 </script>
 
 <style scoped>
