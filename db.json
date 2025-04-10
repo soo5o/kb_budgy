@@ -186,11 +186,20 @@
       "type": "income"
     },
     {
-      "id": "3a54",
-      "amount": 1000,
+      "id": "50d5",
+      "amount": 5000,
       "category": "식비",
-      "consumptionDate": "2025-04-09",
-      "memo": "주식 수수료",
+      "consumptionDate": "2025-04-10",
+      "memo": "aaa",
+      "type": "expense",
+      "userId": "1"
+    },
+    {
+      "id": "4f26",
+      "amount": 500000,
+      "category": "취미",
+      "consumptionDate": "2025-04-10",
+      "memo": "dfdfdf",
       "type": "expense",
       "userId": "1"
     }
@@ -198,8 +207,11 @@
   "goal": [
     {
       "id": "1",
-      "goal_amount": null,
-      "saved_date": ["2025-01-01", "2025-04-01", "2025-01-08"]
+      "saved_date": ["2025-01-01", "2025-04-01", "2025-01-08"],
+      "goal_amount": {
+        "amount": 50000,
+        "start_date": "2025-04-10"
+      }
     },
     {
       "id": "2",
