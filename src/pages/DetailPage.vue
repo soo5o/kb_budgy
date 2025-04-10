@@ -66,8 +66,22 @@
 
             <!-- 수정 삭제 -->
             <div v-if="EditDeleteId === item.id">
-              <button id="editMoneyItemButton" class="btn btn-success me-2" @click.stop="goToEditPage">수정</button>
-              <button id="deleteMoneyItemButton" class="btn btn-danger" @click.stop="deleteMoneyItem">삭제</button>
+              <button
+                id="editMoneyItemButton"
+                class="btn btn-success me-2"
+                @click.stop="goToEditPage"
+                style="background-color: #4fcca4; border: none"
+              >
+                수정
+              </button>
+              <button
+                id="deleteMoneyItemButton"
+                class="btn btn-secondary me-2"
+                style="border: none"
+                @click.stop="deleteMoneyItem"
+              >
+                삭제
+              </button>
             </div>
           </li>
         </ul>
