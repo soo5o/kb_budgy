@@ -123,7 +123,7 @@ const handleClose = () => {
   border-radius: 1rem;
   width: 400px;
   max-width: 90%;
-  height: 300px;
+  height: 350px;
   overflow-y: auto;
 }
 input {
