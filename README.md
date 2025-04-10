@@ -1,7 +1,7 @@
 <p align="center">
   <img src="https://github.com/user-attachments/assets/689c9bd5-a17b-4fd3-b6f1-7d49e969c631" width="400" />
 </p>
-<h1 align="center">🐦 buggy - 당신의 똑똑한 가계부 파트너</h1> <p align="center"> 소비 습관을 파악하고, 목표 지출을 지키며,<br> 더 나은 재정 관리를 위한 여정에 함께하세요!<br><br> <strong>"Track, Manage, and Achieve"</strong><br> </p> <br>
+<h1 align="center">🐦 budgy - 당신의 똑똑한 가계부 파트너</h1> <p align="center"> 소비 습관을 파악하고, 목표 지출을 지키며,<br> 더 나은 재정 관리를 위한 여정에 함께하세요!<br><br> <strong>"Track, Manage, and Achieve"</strong><br> </p> <br>
 
 - [Teck Stack](#Teck-Stack)
 - [ERD](#ERD)
