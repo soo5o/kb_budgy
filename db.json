@@ -186,11 +186,11 @@
       "type": "income"
     },
     {
-      "id": "50d5",
+      "id": "2b4c",
       "amount": 5000,
-      "category": "식비",
-      "consumptionDate": "2025-04-10",
-      "memo": "aaa",
+      "category": "가족",
+      "consumptionDate": "2025-04-17",
+      "memo": "ㅇㅇㅇㅇ",
       "type": "expense",
       "userId": "1"
     }
@@ -198,9 +198,13 @@
   "goal": [
     {
       "id": "1",
-      "saved_date": ["2025-01-01", "2025-04-01", "2025-01-08"],
+      "saved_date": [
+        "2025-01-01",
+        "2025-04-01",
+        "2025-01-08"
+      ],
       "goal_amount": {
-        "amount": 10,
+        "amount": 10000,
         "start_date": "2025-04-10"
       }
     },
