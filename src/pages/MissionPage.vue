@@ -8,6 +8,10 @@
         <h3 class="fw-bold text-center">
           {{ parseInt(userGoal.goal_amount.amount).toLocaleString() }}원
         </h3>
+        <br />
+        <h5 class="text-center fw-bold">
+          목표 설정일 : {{ userGoal.goal_amount.start_date }}
+        </h5>
       </div>
       <br />
       <div class="d-flex justify-content-around">
@@ -71,7 +75,11 @@
       <div
         id="viewContinuous"
         class="card p-3"
-        v-if="userGoal.goal_amount == null && userGoal.saved_date != null"
+        v-if="
+          userGoal != null &&
+          userGoal.goal_amount == null &&
+          userGoal.saved_date != null
+        "
       >
         <h4 class="card-title text-center">
           <i class="fa-solid fa-thumbs-up" style="color: #4fcca4"></i>
@@ -145,10 +153,10 @@ onMounted(async () => {
           },
         });
 
-        //goal의 startDate 이후만 구하기
+        //goal의 startDate 이후만 구하기(startDate포함)
         userMoneyList.value = responseMoney.data.filter((item) => {
           return (
-            new Date(item.consumptionDate) >
+            new Date(item.consumptionDate) >=
             new Date(userGoal.value.goal_amount.start_date)
           );
         });
@@ -167,7 +175,7 @@ onMounted(async () => {
           dayConsume[date] += amount;
         });
 
-        console.log(dayConsume);
+        console.log('날짜별 사용자 구매: ', dayConsume);
 
         //goal의 goal_amount보다 money가 더 적으면 successDate 배열에 넣기
         for (const consume in dayConsume) {
@@ -176,6 +184,29 @@ onMounted(async () => {
             console.log('push ', successDate.value);
           }
         }
+
+        //소비 아예 없는 날도 미션 성공이므로 successDates에 추가
+        function getDatesBetween(startDate, endDate) {
+          const dates = [];
+          const current = new Date(startDate);
+          while (current <= endDate) {
+            const dateStr = current.toISOString().split('T')[0];
+            dates.push(dateStr);
+            current.setDate(current.getDate() + 1);
+          }
+          return dates;
+        }
+        const allDates = getDatesBetween(
+          userGoal.value.goal_amount.start_date,
+          new Date()
+        );
+        const usedDates = userMoneyList.value.map(
+          (item) => item.consumptionDate
+        );
+        const noSpendDates = allDates.filter(
+          (date) => !usedDates.includes(date)
+        );
+        successDate.value.push(...noSpendDates);
       }
 
       console.log('savedDate: ', savedDate.value);
