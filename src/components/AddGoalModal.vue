@@ -65,7 +65,6 @@ const resetForm = () => {
 };
 const today = new Date().toISOString().split('T')[0];
 const submitGoal = async () => {
-  //금액 양수로만 받는 거 검사추가하기
   try {
     console.log('props.userId: ', props.userId);
     const data = await axios.get(`http://localhost:3000/goal/${props.userId}`);
