@@ -20,7 +20,8 @@
 ![image](https://github.com/user-attachments/assets/d5d73d95-0cc4-4bf0-8184-1f4e4d54770d)
 
 ## 📁Project Structure
-![image](https://github.com/user-attachments/assets/5f738ccb-02dc-4ddf-a61e-d81bf11416b4)
+![image](https://github.com/user-attachments/assets/fc3da62a-5150-4949-8fb0-6185327323b7)
+
 
 ## 💰Main Feature
 - <strong>가계부 CRUD</strong>
