@@ -2,14 +2,17 @@
 <template>
   <div class="d-flex justify-content-center">
     <div class="detail-container">
-      <MoneySummary :totalIncome="totalIncome" :totalExpense="totalExpense"></MoneySummary>
+      <MoneySummary
+        :totalIncome="totalIncome"
+        :totalExpense="totalExpense"
+      ></MoneySummary>
       <nav class="navbar navbar-light mt-3">
         <form class="container-fluid justify-content-start">
           <button
             :style="{
               backgroundColor: filterType === 'daily' ? '#4fcca4' : 'white',
-              color: filterType === 'daily' ? 'white' : 'black',
-              borderColor: filterType === 'daily' ? '' : 'rgb(174, 174, 174)',
+              color: filterType === 'daily' ? 'white' : '#4fcca4',
+              borderColor: filterType === 'daily' ? '' : '#4fcca4',
             }"
             @click="filterType = 'daily'"
             class="btn me-2"
@@ -20,8 +23,8 @@
           <button
             :style="{
               backgroundColor: filterType === 'weekly' ? '#4fcca4' : 'white',
-              color: filterType === 'weekly' ? 'white' : 'black',
-              borderColor: filterType === 'weekly' ? '' : 'rgb(174, 174, 174)',
+              color: filterType === 'weekly' ? 'white' : '#4fcca4',
+              borderColor: filterType === 'weekly' ? '' : '#4fcca4',
             }"
             @click="filterType = 'weekly'"
             class="btn me-2"
@@ -32,8 +35,8 @@
           <button
             :style="{
               backgroundColor: filterType === 'monthly' ? '#4fcca4' : 'white',
-              color: filterType === 'monthly' ? 'white' : 'black',
-              borderColor: filterType === 'monthly' ? '' : 'rgb(174, 174, 174)',
+              color: filterType === 'monthly' ? 'white' : '#4fcca4',
+              borderColor: filterType === 'monthly' ? '' : '#4fcca4',
             }"
             @click="filterType = 'monthly'"
             class="btn me-2"
@@ -56,32 +59,36 @@
             @click="EditDelete(item.id)"
             style="cursor: pointer"
           >
-            <div>
+            <div class="text-truncate memo-text">
               <strong>{{ categoryEmoji(item.category) }}&nbsp;</strong>
               <small class="text-muted">{{ item.memo || '메모 없음' }}</small>
             </div>
-            <span class="fw-bold" :style="{ color: item.type === 'income' ? '#4fcca4' : 'black' }">
-              {{ item.type === 'income' ? '+' : '-' }}{{ Number(item.amount).toLocaleString() }}원
-            </span>
+            <div class="d-flex align-items-center flex-nowrap">
+              <span
+                class="fw-bold pt-1 amount-text"
+                :style="{ color: item.type === 'income' ? '#4fcca4' : 'black' }"
+                v-html="formatAmount(item)"
+              ></span>
 
-            <!-- 수정 삭제 -->
-            <div v-if="EditDeleteId === item.id">
-              <button
-                id="editMoneyItemButton"
-                class="btn btn-success me-2"
-                @click.stop="goToEditPage"
-                style="background-color: #4fcca4; border: none"
+              <div
+                v-if="EditDeleteId === item.id"
+                class="ms-2 d-flex flex-nowrap"
               >
-                수정
-              </button>
-              <button
-                id="deleteMoneyItemButton"
-                class="btn btn-secondary me-2"
-                style="border: none"
-                @click.stop="deleteMoneyItem"
-              >
-                삭제
-              </button>
+                <button
+                  id="editMoneyItemButton"
+                  class="edit-btn me-2"
+                  @click.stop="goToEditPage"
+                >
+                  수정
+                </button>
+                <button
+                  id="deleteMoneyItemButton"
+                  class="delete-btn me-2"
+                  @click.stop="deleteMoneyItem"
+                >
+                  삭제
+                </button>
+              </div>
             </div>
           </li>
         </ul>
@@ -110,9 +117,12 @@ const router = useRouter();
 const userStore = useUserStore();
 const moneyList = ref([]);
 const filterType = ref('daily');
-const dateRange = ref([]);
 const EditDeleteId = ref([]);
-
+const formatAmount = (item) => {
+  const sign = item.type === 'income' ? '+' : '-';
+  const amount = Number(item.amount).toLocaleString();
+  return `${sign}${amount}<span style="white-space: nowrap">원</span>`;
+};
 // 수정, 삭제할 아이템
 const EditDelete = (id) => {
   EditDeleteId.value = EditDeleteId.value === id ? null : id;
@@ -139,19 +149,27 @@ const fetchData = async () => {
     router.push('/login');
   }
 
-  const { data } = await axios.get(`http://localhost:3000/money?userId=${String(userId.value)}`);
+  const { data } = await axios.get(
+    `http://localhost:3000/money?userId=${String(userId.value)}`
+  );
 
-  moneyList.value = data.sort((a, b) => new Date(b.consumptionDate) - new Date(a.consumptionDate));
+  moneyList.value = data.sort(
+    (a, b) => new Date(b.consumptionDate) - new Date(a.consumptionDate)
+  );
 };
 
 //총 수입 계산하는 함수
 const totalIncome = computed(() => {
-  return moneyList.value.filter((item) => item.type === 'income').reduce((acc, cur) => acc + Number(cur.amount), 0);
+  return moneyList.value
+    .filter((item) => item.type === 'income')
+    .reduce((acc, cur) => acc + Number(cur.amount), 0);
 });
 
 //총 지출 계산하는 함수
 const totalExpense = computed(() => {
-  return moneyList.value.filter((item) => item.type === 'expense').reduce((acc, cur) => acc + Number(cur.amount), 0);
+  return moneyList.value
+    .filter((item) => item.type === 'expense')
+    .reduce((acc, cur) => acc + Number(cur.amount), 0);
 });
 
 //날짜 포맷 함수
@@ -159,7 +177,9 @@ const formatDate = (dateStr) => {
   if (filterType.value === 'weekly') return dateStr;
   if (filterType.value === 'monthly') return `${dateStr.split('-')[1]}월`;
   const date = new Date(dateStr);
-  return `${date.getMonth() + 1}월 ${date.getDate()}일 (${['일', '월', '화', '수', '목', '금', '토'][date.getDay()]})`;
+  return `${date.getMonth() + 1}월 ${date.getDate()}일 (${
+    ['일', '월', '화', '수', '목', '금', '토'][date.getDay()]
+  })`;
 };
 
 //날짜별 리스트
@@ -245,5 +265,29 @@ hr {
 }
 form {
   position: relative;
+}
+.amount-text {
+  white-space: nowrap;
+  display: inline-block;
+}
+.edit-btn,
+.delete-btn {
+  white-space: nowrap; /* 줄바꿈 방지 */
+  min-width: 48px; /* 최소 너비 확보 */
+  padding: 6px 10px; /* 여백은 줄이고 */
+  font-size: 0.9rem; /* 글씨도 약간 줄이기 */
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.edit-btn {
+  background-color: #4fcca4;
+  color: white;
+}
+
+.delete-btn {
+  background-color: rgb(174, 174, 174);
+  color: white;
 }
 </style>
