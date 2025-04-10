@@ -193,27 +193,14 @@
       "memo": "aaa",
       "type": "expense",
       "userId": "1"
-    },
-    {
-      "id": "4f26",
-      "amount": 500000,
-      "category": "취미",
-      "consumptionDate": "2025-04-10",
-      "memo": "dfdfdf",
-      "type": "expense",
-      "userId": "1"
     }
   ],
   "goal": [
     {
       "id": "1",
-      "saved_date": [
-        "2025-01-01",
-        "2025-04-01",
-        "2025-01-08"
-      ],
+      "saved_date": ["2025-01-01", "2025-04-01", "2025-01-08"],
       "goal_amount": {
-        "amount": 50000,
+        "amount": 10,
         "start_date": "2025-04-10"
       }
     },
