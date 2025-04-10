@@ -148,7 +148,7 @@ onMounted(async () => {
         //goal의 startDate 이후만 구하기
         userMoneyList.value = responseMoney.data.filter((item) => {
           return (
-            new Date(item.consumptionDate) >
+            new Date(item.consumptionDate) >=
             new Date(userGoal.value.goal_amount.start_date)
           );
         });
