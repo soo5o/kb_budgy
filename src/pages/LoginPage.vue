@@ -60,15 +60,15 @@ const validateForm = () => {
   return true;
 };
 const handleSubmit = async () => {
-  const matchData = await userStore.matchUserInfo(
-    userInfo.value.email,
-    userInfo.value.password
-  );
-  if (!matchData) {
-    msg.value = '회원정보가 일치하지 않습니다';
-    return;
-  }
   if (validateForm()) {
+    const matchData = await userStore.matchUserInfo(
+      userInfo.value.email,
+      userInfo.value.password
+    );
+    if (!matchData) {
+      msg.value = '회원정보가 일치하지 않습니다';
+      return;
+    }
     router.push('/home');
   }
 };
