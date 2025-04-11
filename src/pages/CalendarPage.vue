@@ -37,8 +37,6 @@ import listPlugin from '@fullcalendar/list';
 import { ref, reactive, nextTick } from 'vue';
 import { useUserStore } from '@/stores/user.js';
 const moneyList = ref([]);
-const totalExpense = ref(0);
-const totalIncome = ref(0);
 const selectedDate = ref(new Date().toISOString().slice(0, 10));
 const calendarEvents = ref([]);
 const userStore = useUserStore();
@@ -53,13 +51,6 @@ const calendarOptions = reactive({
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth() + 1;
     moneyList.value = await userStore.getMoneyList(userId, year, month);
-    console.log(moneyList.value);
-    totalExpense.value = moneyList.value.reduce((acc, cur) => {
-      return cur.type === 'expense' ? acc + parseInt(cur.amount) : acc;
-    }, 0);
-    totalIncome.value = moneyList.value.reduce((acc, cur) => {
-      return cur.type === 'income' ? acc + parseInt(cur.amount) : acc;
-    }, 0);
     calendarEvents.value = generateDailySummaryEvents(moneyList.value); //일별 이벤트 생성
   },
 
@@ -158,7 +149,6 @@ function generateDailySummaryEvents(moneyList) {
       });
     }
   }
-
   return events;
 }
 function smoothScrollTo(targetY, duration = 800) {
